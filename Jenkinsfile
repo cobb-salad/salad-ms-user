@@ -34,7 +34,8 @@ node {
             }
         }catch(e){
             currentBuild.result = "FAILURE"
-            throw(e)
+//             throw(e)
+            println(e)
         }
 
     }
