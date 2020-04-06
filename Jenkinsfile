@@ -25,8 +25,15 @@ node {
         println "SCALA_VERSION = " + "${params.SCALA_VERSION}"
         println "ASSEMBLY = " + "${params.ASSEMBLY}"
 
-        some_flag = params.TAG != null ? true : false
+        some_flag = params.TAG != "" ? true : false
         println "${some_flag}"
+
+        if (params.TAG == "") {
+            throw new Exception("There is not TAG")
+        }catch(e){
+            currentBuild.result = "FAILURE"
+            throw(e)
+        }
 
     }
 }
