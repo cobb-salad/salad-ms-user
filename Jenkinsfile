@@ -10,10 +10,10 @@ pipeline {
     stages {
         stage("Parameter Check") {
             steps {
-                println "TAG = " + $TAG
-                println "BUILD_TYPE = " + $BUILD_TYPE
-                println "SCALA_VERSION = " + $SCALA_VERSION
-                println "ASSEMBLY = " + $ASSEMBLY
+                println "TAG = " + ${params.TAG}
+                println "BUILD_TYPE = " + ${params.BUILD_TYPE}
+                println "SCALA_VERSION = " + ${params.SCALA_VERSION}
+                println "ASSEMBLY = " + ${params.ASSEMBLY}
             }
         }
     }
