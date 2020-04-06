@@ -16,9 +16,7 @@
 //     }
 // }
 
-def label = "test"
-
-node(label){
+node {
 
     stage('Parameter Check'){
 
