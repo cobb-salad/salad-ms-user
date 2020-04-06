@@ -9,10 +9,17 @@ pipeline {
                 println "SCALA_VERSION = " + "${params.SCALA_VERSION}"
                 println "ASSEMBLY = " + "${params.ASSEMBLY}"
 
-                if(${params.TAG} == "") {
+                try{
+
+                    if(${params.TAG} == "") {
+                        currentBuild.result = "FAILURE"
+                        throw new Exception("There is no TAG")
+                    }
+                }catch (e) {
                     currentBuild.result = "FAILURE"
-                    throw new Exception("There is no TAG")
+                    println(e)
                 }
+
             }
         }
     }
