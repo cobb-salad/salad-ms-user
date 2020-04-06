@@ -28,8 +28,10 @@ node {
         some_flag = params.TAG != "" ? true : false
         println "${some_flag}"
 
-        if (params.TAG == "") {
-            throw new Exception("There is not TAG")
+        try{
+            if (params.TAG == "") {
+                throw new Exception("There is not TAG")
+            }
         }catch(e){
             currentBuild.result = "FAILURE"
             throw(e)
