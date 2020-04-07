@@ -42,7 +42,7 @@ node {
                             doGenerateSubmoduleConfigurations: false,
                             extensions                       : [],
                             submoduleCfg                     : [],
-                            userRemoteConfigs                : [[url: 'git@github.com:TheWeatherCompany/sun-ms-${SERVICE}']]
+                            userRemoteConfigs                : [[url: 'git@github.com:cobb-salad/salad-ms-${SERVICE}']]
                     ]
             )
             println "Git CheckOut End"
