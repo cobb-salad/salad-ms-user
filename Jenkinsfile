@@ -34,7 +34,6 @@ node {
     }
 
     stage("Git CheckOut", {
-        if (useTest || useBuild) {
             println "Git CheckOut Started"
             checkout(
                     [
@@ -47,9 +46,6 @@ node {
                     ]
             )
             println "Git CheckOut End"
-        } else {
-            println "Git CheckOut Skip"
-        }
     })
 
     stage("Build Artifact") {
