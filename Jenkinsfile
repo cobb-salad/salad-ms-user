@@ -58,6 +58,8 @@ node {
             SBT_OPTION="-Dsbt.log.noformat=true"
             SBT_ACTION="clean assembly"
 
+            sh "ls -la"
+
 
         }else{
 
