@@ -42,7 +42,7 @@ node {
                             doGenerateSubmoduleConfigurations: false,
                             extensions                       : [],
                             submoduleCfg                     : [],
-                            userRemoteConfigs                : [[credentialsId: 'github_mjkong_ssh', url: 'git@github.com:cobb-salad/salad-ms-${SERVICE}']]
+                            userRemoteConfigs                : [[credentialsId: 'github_mjkong_ssh', url: 'https://github.com/cobb-salad/salad-ms-${SERVICE}.git']]
                     ]
             )
             println "Git CheckOut End"
