@@ -25,8 +25,8 @@ node {
         println "SCALA_VERSION = " + "${params.SCALA_VERSION}"
         println "ASSEMBLY = " + "${params.ASSEMBLY}"
 
-        some_flag = params.TAG != "" ? true : false
-        println "${some_flag}"
+//         some_flag = params.TAG != "" ? true : false
+//         println "${some_flag}"
 
         try{
             if (params.TAG == "") {
@@ -38,5 +38,10 @@ node {
             println(e)
         }
 
+    }
+
+    stage("Build Artifact") {
+
+        sh 'ls -al'
     }
 }
