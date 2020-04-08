@@ -72,7 +72,9 @@ node {
     stage("Build AMI") {
 
         println "${AMI_VERSION}"
-        prlntln "${AMI_VERSION++}"
+        AMI_VERSION++
+        prlntln "${AMI_VERSION}"
+        AMI_VERSION = AMI_VERSION + 1
         println "${AMI_VERSION++}"
 
 
