@@ -84,12 +84,10 @@ node {
             pwd
         '''
 
-        CurrentDir = sh 'pwd'
-
         println "CurrentDir"
+        def CurrentDir = sh(script:'pwd', returnStdout:true).trim()
+
         println "${CurrentDir}"
-
-
 
     }
 }
