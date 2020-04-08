@@ -73,6 +73,8 @@ node {
 
         def outfile = "output.out"
 
+        def returnString = ""
+
         println "${AMI_VERSION}"
         AMI_VERSION++
         println "${AMI_VERSION}"
@@ -83,7 +85,7 @@ node {
         sh '''
             echo $JENKINS_HOME
             ls -la
-            pwd > $outfile
+            returnString = pwd
         '''
 
 //         def CurrentDir = sh(script:'pwd > output.out', returnStdout:true).trim()
@@ -91,6 +93,7 @@ node {
 //         println "${CurrentDir}"
 
 
+        println "${returnString}"
         def scout = readFile(outfile)
 
         println "${scout}"
