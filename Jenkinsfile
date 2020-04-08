@@ -84,13 +84,12 @@ node {
             echo $JENKINS_HOME
             ls -la
             cd ..
-            pwd
+            pwd > "${outfile}"
         '''
 
-        println "CurrentDir"
-        def CurrentDir = sh(script:'pwd > output.out', returnStdout:true).trim()
+//         def CurrentDir = sh(script:'pwd > output.out', returnStdout:true).trim()
 
-        println "${CurrentDir}"
+//         println "${CurrentDir}"
 
 
         def scout = readFile(outfile)
