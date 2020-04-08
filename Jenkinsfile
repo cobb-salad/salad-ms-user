@@ -1,5 +1,5 @@
 node {
-
+    def AMI_VERION = 0
     stage('Parameter Check'){
 
         TAG = "${params.TAG}"
@@ -23,7 +23,7 @@ node {
                 throw new Exception("You must select Service")
             }
             if (params.TAG == "") {
-                throw new Exception("There is not TAG")
+                throw new Exception("Enter the artifact version for the build in TAG")
             }
         }catch(e){
             currentBuild.result = "FAILURE"
@@ -67,5 +67,14 @@ node {
             GRADLE_TASK="clean install"
 
         }
+    }
+
+    stage("Build AMI") {
+
+        println (AMI_VERISION)
+        prlntln (AMI_VERISION++)
+        println (AMI_VERISION++)
+
+
     }
 }
