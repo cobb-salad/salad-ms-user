@@ -77,7 +77,6 @@ node {
         AMI_VERSION = AMI_VERSION + 1
         println "${AMI_VERSION++}"
         println "${AMI_VERSION}"
-        println $AMI_VERSION
 
 
 
