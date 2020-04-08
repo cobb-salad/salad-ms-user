@@ -80,5 +80,9 @@ node {
         println $AMI_VERSION
 
 
+
+        sh "echo $JENKINS_HOME"
+
+
     }
 }
