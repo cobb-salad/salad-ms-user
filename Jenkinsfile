@@ -71,7 +71,7 @@ node {
 
     stage("Build AMI") {
 
-        def outfile = "output.out"
+        env.outfile = "output.out"
 
         def returnString = ""
 
@@ -85,7 +85,8 @@ node {
         sh '''
             echo $JENKINS_HOME
             ls -la
-            returnString = pwd
+            pwd
+            echo $outfile
         '''
 
 //         def CurrentDir = sh(script:'pwd > output.out', returnStdout:true).trim()
