@@ -83,7 +83,7 @@ node {
         sh '''
             echo $JENKINS_HOME
             ls -la
-            pwd > "${outfile}"
+            pwd > $outfile
         '''
 
 //         def CurrentDir = sh(script:'pwd > output.out', returnStdout:true).trim()
