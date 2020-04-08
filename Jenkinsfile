@@ -89,9 +89,9 @@ node {
             echo $outfile
         '''
 
-//         def CurrentDir = sh(script:'pwd > output.out', returnStdout:true).trim()
+        def CurrentDir = sh(script:'pwd > $outfile', returnStdout:true).trim()
 
-//         println "${CurrentDir}"
+        println "${CurrentDir}"
 
 
         println "${returnString}"
