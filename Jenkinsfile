@@ -84,6 +84,11 @@ node {
             pwd
         '''
 
+        CurrentDir = sh 'pwd'
+
+        println "CurrentDir"
+        println "${CurrentDir}"
+
 
 
     }
