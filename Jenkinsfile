@@ -71,6 +71,8 @@ node {
 
     stage("Build AMI") {
 
+        def outfile = "output.out"
+
         println "${AMI_VERSION}"
         AMI_VERSION++
         println "${AMI_VERSION}"
@@ -86,9 +88,13 @@ node {
         '''
 
         println "CurrentDir"
-        def CurrentDir = sh(script:'pwd', returnStdout:true).trim()
+        def CurrentDir = sh(script:'pwd 2> ${outfile}', returnStdout:true).trim()
 
         println "${CurrentDir}"
 
+
+        def scout = readFile(outfile)
+
+        println "${scout}"
     }
 }
