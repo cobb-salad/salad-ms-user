@@ -1,5 +1,5 @@
 node {
-    def AMI_VERION = 0
+    def AMI_VERSION = 0
     stage('Parameter Check'){
 
         TAG = "${params.TAG}"
