@@ -78,9 +78,12 @@ node {
         println "${AMI_VERSION++}"
         println "${AMI_VERSION}"
 
+        sh ```
+            "echo $JENKINS_HOME"
+            ls -la
+            pwd
+        ```
 
-
-        sh "echo $JENKINS_HOME"
 
 
     }
