@@ -83,7 +83,6 @@ node {
         sh '''
             echo $JENKINS_HOME
             ls -la
-            cd ..
             pwd > "${outfile}"
         '''
 
