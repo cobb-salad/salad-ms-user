@@ -79,7 +79,7 @@ node {
         println "${AMI_VERSION}"
 
         sh '''
-            "echo $JENKINS_HOME"
+            echo $JENKINS_HOME
             ls -la
             pwd
         '''
