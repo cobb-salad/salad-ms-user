@@ -98,5 +98,18 @@ node {
         def scout = readFile(outfile)
 
         println "${scout}"
+
+        check()
+    }
+}
+
+def check() {
+
+    def VERSION = 0
+
+    while(VERSION == 3) {
+
+        println "$VERSION"
+        VERSION = VERSION + 1
     }
 }
