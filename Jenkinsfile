@@ -2,6 +2,9 @@ def check() {
 
     println "in check"
 
+    println "${AMI_VERSION}"
+    println "test"
+
     int VERSION = 0
     def exist = true
 
