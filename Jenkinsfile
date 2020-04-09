@@ -6,7 +6,7 @@ def check() {
 
     while(VERSION == 3) {
 
-        println "$VERSION"
+        println "${VERSION}"
         VERSION = VERSION + 1
     }
 }
