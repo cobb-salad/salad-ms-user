@@ -107,7 +107,9 @@ node {
 
         println "end check"
 
-        println find()
+        returnStr = find()
+
+        println "${returnStr}"
     }
 }
 
