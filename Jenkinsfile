@@ -1,27 +1,4 @@
-def check() {
-
-    println "in check"
-
-    println "${AMI_VERSION}"
-    println "test"
-
-    int VERSION = 0
-    def exist = true
-
-    while(exist == true) {
-
-        println "${VERSION}"
-        if(VERSION == 3){
-            exist = false
-        }else{
-            VERSION = VERSION + 1
-        }
-    }
-
-    println "${VERSION}"
-}
-
-def AMI_VERSION = 0
+AMI_VERSION = 0
 
 
 node {
@@ -130,5 +107,28 @@ node {
 
         println "end check"
     }
+}
+
+def check() {
+
+    println "in check"
+
+    println "${AMI_VERSION}"
+    println "test"
+
+    int VERSION = 0
+    def exist = true
+
+    while(exist == true) {
+
+        println "${VERSION}"
+        if(VERSION == 3){
+            exist = false
+        }else{
+            VERSION = VERSION + 1
+        }
+    }
+
+    println "${VERSION}"
 }
 
