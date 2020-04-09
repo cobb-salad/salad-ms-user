@@ -9,6 +9,8 @@ def check() {
         println "${VERSION}"
         VERSION = VERSION + 1
     }
+
+    println "${VERSION}"
 }
 
 
