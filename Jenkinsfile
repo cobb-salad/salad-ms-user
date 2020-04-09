@@ -3,11 +3,16 @@ def check() {
     println "in check"
 
     int VERSION = 0
+    def exist = true
 
-    while(VERSION <= 3) {
+    while(exist == true) {
 
         println "${VERSION}"
-        VERSION = VERSION + 1
+        if(VERSION == 3){
+            exist = false
+        }else{
+            VERSION = VERSION + 1
+        }
     }
 
     println "${VERSION}"
