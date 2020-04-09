@@ -21,9 +21,10 @@ def check() {
     println "${VERSION}"
 }
 
+def AMI_VERSION = 0
+
 
 node {
-    def AMI_VERSION = 0
     stage('Parameter Check'){
 
         TAG = "${params.TAG}"
