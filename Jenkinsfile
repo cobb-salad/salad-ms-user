@@ -2,9 +2,9 @@ def check() {
 
     println "in check"
 
-    def VERSION = 0
+    int VERSION = 0
 
-    while($VERSION == 3) {
+    while(VERSION == 3) {
 
         println "${VERSION}"
         VERSION = VERSION + 1
