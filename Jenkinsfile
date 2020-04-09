@@ -106,6 +106,8 @@ node {
         check()
 
         println "end check"
+
+        println find()
     }
 }
 
@@ -130,5 +132,9 @@ def check() {
     }
 
     println "${VERSION}"
+}
+
+def find() {
+    return "find"
 }
 
