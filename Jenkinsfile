@@ -1,3 +1,15 @@
+def check() {
+
+    def VERSION = 0
+
+    while(VERSION == 3) {
+
+        println "$VERSION"
+        VERSION = VERSION + 1
+    }
+}
+
+
 node {
     def AMI_VERSION = 0
     stage('Parameter Check'){
@@ -103,13 +115,3 @@ node {
     }
 }
 
-def check() {
-
-    def VERSION = 0
-
-    while(VERSION == 3) {
-
-        println "$VERSION"
-        VERSION = VERSION + 1
-    }
-}
