@@ -1,5 +1,7 @@
 def check() {
 
+    println "in check"
+
     def VERSION = 0
 
     while(VERSION == 3) {
@@ -111,7 +113,11 @@ node {
 
         println "${scout}"
 
+        println "call check"
+
         check()
+
+        println "end check"
     }
 }
 
