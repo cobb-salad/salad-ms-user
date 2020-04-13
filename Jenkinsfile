@@ -73,6 +73,13 @@ node {
 
     stage("Build AMI") {
 
+        userInput = input(
+            id: 'Proceed1', message: 'Was this successful?', parameters: [
+            [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this']
+         ])
+
+        println "${userInput}"
+
         env.outfile = "output.out"
 
         def returnString = ""
