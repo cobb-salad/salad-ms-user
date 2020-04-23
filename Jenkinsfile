@@ -118,6 +118,19 @@ node {
 
         println "${returnStr}"
     }
+
+    stage("after build ami"){
+
+        env.TESTVAL = "ttt"
+
+        sh '''
+           export TESTVAL='test'
+        '''
+
+        AFTERVAL=env.TESTVAL
+
+        println "${AFTERVAL}"
+    }
 }
 
 def check() {
