@@ -121,10 +121,15 @@ node {
         env.TESTVAL = "ttt"
 
         sh '''
-           export TESTVAL='test'
+            echo $TESTVAL
+           export TESTVAL="test"
         '''
 
+        println "env start"
+
         println "${env.TESTVAL}"
+
+        println "env end"
 
     }
 }
