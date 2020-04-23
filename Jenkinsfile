@@ -122,7 +122,7 @@ node {
 
         sh '''
             echo $TESTVAL
-           export TESTVAL="test"
+           export TESTVAL=test
            echo $TESTVAL
         '''
 
