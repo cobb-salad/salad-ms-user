@@ -114,9 +114,6 @@ node {
 
         println "end check"
 
-        returnStr = find()
-
-        println "${returnStr}"
     }
 
     stage("after build ami"){
@@ -156,7 +153,4 @@ def check() {
     println "${VERSION}"
 }
 
-def find() {
-    return "find"
-}
 
