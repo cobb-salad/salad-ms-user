@@ -74,8 +74,10 @@ node {
 
     stage("Build AMI") {
 
+        env.AMI_VERSION="${AMI_VERSION}"
+
         userInput = input(
-            id: 'Proceed1', message: 'AMI_VERSION is "${AMI_VERSION}" : Do you want to use this version?', parameters: [
+            id: 'Proceed1', message: 'AMI_VERSION is ${env.AMI_VERSION} : Do you want to use this version?', parameters: [
             [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this']
          ])
 
