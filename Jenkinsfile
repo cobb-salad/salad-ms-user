@@ -123,6 +123,7 @@ node {
         sh '''
             echo $TESTVAL
            export TESTVAL="test"
+           echo $TESTVAL
         '''
 
         println "env start"
@@ -130,6 +131,12 @@ node {
         println "${env.TESTVAL}"
 
         println "env end"
+
+        AFTER="${env.TESTVAL}"
+
+        println "${TESTVAL}"
+
+        println "end end"
 
     }
 }
