@@ -9,6 +9,7 @@ node {
         SCALA_VERSION = "${params.SCALA_VERSION}"
         ASSEMBLY = "${params.ASSEMBLY}"
         SERVICE = "${params.SERVICE}"
+        AMI_VERSION = "${params.AMI_VERSION}"
 
 
         println "${TAG}"
@@ -73,12 +74,12 @@ node {
 
     stage("Build AMI") {
 
-//         userInput = input(
-//             id: 'Proceed1', message: 'Was this successful?', parameters: [
-//             [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this']
-//          ])
-//
-//         println "${userInput}"
+        userInput = input(
+            id: 'Proceed1', message: 'AMI_VERSION is ${AMI_VERSION} : Do you want to use this version?', parameters: [
+            [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this']
+         ])
+
+        println "${userInput}"
 
         env.outfile = "output.out"
 
