@@ -124,9 +124,8 @@ node {
            export TESTVAL='test'
         '''
 
-        AFTERVAL="${env.TESTVAL}"
+        println "${env.TESTVAL}"
 
-        println "${AFTERVAL}"
     }
 }
 
