@@ -95,7 +95,7 @@ node {
         env.TESTVAL2="ttt"
 
         sh '''
-
+            who
             touch test2
             echo '\"test\"' > test2
             echo $TESTVAL2
