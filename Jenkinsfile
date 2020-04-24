@@ -80,12 +80,12 @@ node {
 
         env.AMI_VERSION="${AMI_VERSION}"
 
-        userInput = input(
-            id: 'Proceed1', message: 'AMI_VERSION is ${env.AMI_VERSION} : Do you want to use this version?', parameters: [
-            [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this']
-         ])
-
-        println "${userInput}"
+//         userInput = input(
+//             id: 'Proceed1', message: 'AMI_VERSION is ${env.AMI_VERSION} : Do you want to use this version?', parameters: [
+//             [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this']
+//          ])
+//
+//         println "${userInput}"
 
         env.outfile = "output.out"
 
@@ -144,6 +144,14 @@ node {
         println "${TESTVAL}"
 
         println "end end"
+
+
+        sh '''
+
+            touch test2
+            echo "\"test\"" > test2
+            sed "s/[^"]/ttt/g" test2
+        '''
 
     }
 }
