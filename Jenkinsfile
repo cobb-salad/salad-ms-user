@@ -98,8 +98,9 @@ node {
 
             touch test2
             echo '\"test\"' > test2
+            echo $TESTVAL2
             cat test2
-            sed -i 's/[^\"]*/$TESTVAL/g' test2
+            sed -i 's/[^\"]*/$TESTVAL2/g' test2
             cat test2
         '''
 
