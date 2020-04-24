@@ -87,64 +87,11 @@ node {
 //
 //         println "${userInput}"
 
-        env.outfile = "output.out"
 
-        def returnString = ""
-
-        println "${AMI_VERSION}"
-        AMI_VERSION++
-        println "${AMI_VERSION}"
-        AMI_VERSION = AMI_VERSION + 1
-        println "${AMI_VERSION++}"
-        println "${AMI_VERSION}"
-
-        sh '''
-            echo $JENKINS_HOME
-            ls -la
-            pwd
-            echo $outfile
-        '''
-
-        def CurrentDir = sh(script:'pwd > $outfile', returnStdout:true).trim()
-
-        println "${CurrentDir}"
-
-
-        println "${returnString}"
-        def scout = readFile(outfile)
-
-        println "${scout}"
-
-        println "call check"
-
-        check()
-
-        println "end check"
 
     }
 
     stage("after build ami"){
-
-        env.TESTVAL = "ttt"
-
-        sh '''
-            echo $TESTVAL
-           export TESTVAL=test
-           echo $TESTVAL
-        '''
-
-        println "env start"
-
-        println "${env.TESTVAL}"
-
-        println "env end"
-
-        AFTER="${env.TESTVAL}"
-
-        println "${TESTVAL}"
-
-        println "end end"
-
 
         sh '''
 
