@@ -97,6 +97,7 @@ node {
 
             touch test2
             echo "\"test\"" > test2
+            cat test2
             sed "s/[^"]/ttt/g" test2
         '''
 
