@@ -74,6 +74,10 @@ node {
 
     stage("Build AMI") {
 
+        if(AMI_VERSION > 0){
+            println "AMI_VERSION is greater than 0"
+        }
+
         env.AMI_VERSION="${AMI_VERSION}"
 
         userInput = input(
