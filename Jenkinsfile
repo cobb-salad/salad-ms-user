@@ -98,13 +98,7 @@ node {
             set -x
             touch test2
             echo '\"test\"' > test2
-            sed -i 's/[^\"]*/'"$TESTVAL2"'/g' test2
-            touch test.sh
-            echo "#!/bin/bash" > test.sh
-            echo "" >> test.sh
-            echo "sed -i 's/[^\"]*/$TESTVAL2/g' test2" >> test.sh
-            chmod +x test.sh
-            ./test.sh
+            `sed -i 's/[^\"]*/'"$TESTVAL2"'/g' test2`
 
             cat test2
             set +x
