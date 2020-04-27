@@ -94,7 +94,8 @@ node {
     stage("after build ami"){
         env.TESTVAL2="ttt"
 
-        sh """#!/bin/bash +x
+        sh """#!/bin/bash
+            set +x
             who
             touch test2
             echo '\"test\"' > test2
