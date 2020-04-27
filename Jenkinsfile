@@ -95,7 +95,7 @@ node {
         env.TESTVAL2="ttt"
 
         sh """#!/bin/bash
-            set +x
+            set -x
             who
             touch test2
             echo '\"test\"' > test2
@@ -103,7 +103,7 @@ node {
             cat test2
             sed -i 's/[^\"]*/'"$TESTVAL2"'/g' test2
             cat test2
-            set -x
+            set +x
         """
 
     }
