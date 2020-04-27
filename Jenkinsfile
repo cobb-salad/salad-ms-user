@@ -96,12 +96,16 @@ node {
 
         sh """#!/bin/bash
             set -x
-            who
             touch test2
             echo '\"test\"' > test2
-            echo $TESTVAL2
-            cat test2
             sed -i 's/[^\"]*/'"$TESTVAL2"'/g' test2
+            touch test.sh
+            echo "#!/bin/bash" > test.sh
+            echo "" >> test.sh
+            echo "sed -i 's/[^\"]*/$TESTVAL2/g' test2" >> test.sh
+            chmod +x test.sh
+            ./test.sh
+
             cat test2
             set +x
         """
