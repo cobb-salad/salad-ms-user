@@ -10,6 +10,7 @@ node {
         ASSEMBLY = "${params.ASSEMBLY}"
         SERVICE = "${params.SERVICE}"
         AMI_VERSION = "${params.AMI_VERSION}"
+        AUTO_INCREMENT_AMI_VERSION = "${params.AUTO_INCREMENT_AMI_VERSION}"
 
 
         println "${TAG}"
@@ -17,6 +18,7 @@ node {
         println "${SCALA_VERSION}"
         println "${ASSEMBLY}"
         println "${SERVICE}"
+        println "${AUTO_INCREMENT_AMI_VERSION}"
 
 //         some_flag = params.TAG != "" ? true : false
 //         println "${some_flag}"
