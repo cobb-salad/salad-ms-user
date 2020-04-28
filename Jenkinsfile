@@ -104,7 +104,7 @@ node {
             touch change.sh
             chmod +x change.sh
 
-            echo "#\!/bin/bash" > change.sh
+            echo "#!/bin/bash" > change.sh
             echo "sed -i 's/ami-[^\"]*/ami-123456789/g' test2"
             #sed -i 's/[^\"]*/'"$TESTVAL2"'/g' test2
 
