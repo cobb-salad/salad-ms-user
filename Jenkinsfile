@@ -21,7 +21,7 @@ node {
         println "${AUTO_INCREMENT_AMI_VERSION}"
         println "${RUN_TASK}"
 
-        taskSize = RUN_TASK.size();
+        taskSize = RUN_TASK.contains("chef");
 
         println "${taskSize}"
 
