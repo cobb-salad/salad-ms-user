@@ -128,7 +128,7 @@ node {
 
 def apply_chef(){
 
-    regex="^[qa|prod].*[1-2]\$" # such like qa-us-east-1, prod-ap-southeast-1, ...
+    regex="^[qa|prod].*[1-2]\$"
     if((env.CHEF_ENVIRONMENT =~ $regex).matches()){
         ATTRIBUTE="[\"platform-microservice\"][\"$SERVICE\"][\"artifact\"][\"version\"]"
     }else{
