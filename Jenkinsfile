@@ -94,6 +94,7 @@ node {
     stage("after build ami"){
         env.TESTVAL2="ttt"
         env.AMI_ID="ami-123456789"
+        env.ENVORONMENT="qa"
 
         sh """#!/bin/bash
             set -x
@@ -115,10 +116,31 @@ node {
             ./change.sh
 
             cat test2
+
+
             set +x
         """
 
+        apply_chef()
     }
+
+}
+
+def apply_chef(){
+
+    regex="^[qa|prod].*[1-2]$" # such like qa-us-east-1, prod-ap-southeast-1, ...
+    if((env.CHEF_ENVIRONMENT =~ $regex).matches()){
+        ATTRIBUTE="[\"platform-microservice\"][\"$SERVICE\"][\"artifact\"][\"version\"]"
+    }else{
+        ATTRIBUTE="[\"b2c-microservice\"][\"$SERVICE\"][\"artifact\"][\"version\"]"
+    }
+
+
+    println "${ATTRIBUTE}"
+
+
+
+
 }
 
 def check() {
