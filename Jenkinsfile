@@ -93,6 +93,7 @@ node {
 
     stage("after build ami"){
         env.TESTVAL2="ttt"
+        env.AMI_ID="ami-123456789"
 
         sh """#!/bin/bash
             set -x
@@ -106,7 +107,7 @@ node {
             echo "#!/bin/bash" > change.sh
             cat change.sh
             #echo "sed -i \'s/ami-[^\"]*/ami-123456789/g\' test2" >> change.sh
-            echo "sed -i \'s/ami-[^\\"]*/ami-123456789/g\' test2" >> change.sh
+            echo "sed -i \'s/ami-[^\\"]*/$AMI_ID/g\' test2" >> change.sh
             #sed -i 's/[^\"]*/'"$TESTVAL2"'/g' test2
 
             cat change.sh
