@@ -13,7 +13,6 @@ node {
         AUTO_INCREMENT_AMI_VERSION = "${params.AUTO_INCREMENT_AMI_VERSION}"
         RUN_TASK = "${params.RUN_TASK}"
 
-
         println "${TAG}"
         println "${BUILD_TYPE}"
         println "${SCALA_VERSION}"
@@ -22,8 +21,9 @@ node {
         println "${AUTO_INCREMENT_AMI_VERSION}"
         println "${RUN_TASK}"
 
-//         some_flag = params.TAG != "" ? true : false
-//         println "${some_flag}"
+        taskSize = RUN_TASK.size();
+
+        println "${taskSize}"
 
         try{
             if (params.SERVICE == "") {
