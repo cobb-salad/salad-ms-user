@@ -148,7 +148,7 @@ def apply_chef(){
 
     sh '''#!/bin/bash
         set -x
-        ./sun-ms-api-$ENVIRON_version = \"test\"
+        ./sun-ms-api-${ENVIRONMENT}_version = \"test\"
         set +x
     '''
 
