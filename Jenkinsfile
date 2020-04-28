@@ -129,7 +129,7 @@ node {
 def apply_chef(){
 
     regex="^[qa|prod].*[1-2]\$"
-    if((env.CHEF_ENVIRONMENT =~ $regex).matches()){
+    if((env.CHEF_ENVIRONMENT =~ regex).matches()){
         ATTRIBUTE="[\"platform-microservice\"][\"$SERVICE\"][\"artifact\"][\"version\"]"
     }else{
         ATTRIBUTE="[\"b2c-microservice\"][\"$SERVICE\"][\"artifact\"][\"version\"]"
