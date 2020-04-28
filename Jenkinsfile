@@ -146,8 +146,9 @@ def apply_chef(){
 
     println "${ATTRIBUTE}"
 
-
-
+    sh '''#!/bin/bash
+        ./sun-ms-api-$ENVIRONMENT_version = \"test\"
+    '''
 
 }
 
