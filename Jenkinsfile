@@ -97,8 +97,21 @@ node {
         sh """#!/bin/bash
             set -x
             touch test2
-            echo '\"test\"' > test2
-            `sed -i 's/[^\"]*/'"$TESTVAL2"'/g' test2`
+            echo 'ami-\"test\"' > test2
+
+
+
+            touch change.sh
+            chmod +x change.sh
+
+            echo "#\!/bin/bash" > change.sh
+            echo "sed -i 's/ami-[^\"]*/ami-123456789/g' test2"
+            #sed -i 's/[^\"]*/'"$TESTVAL2"'/g' test2
+
+            ls -la
+            cat change.sh
+
+            ./change.sh
 
             cat test2
             set +x
