@@ -94,7 +94,9 @@ node {
     stage("after build ami"){
         env.TESTVAL2="ttt"
         env.AMI_ID="ami-123456789"
-        env.ENVORONMENT="qa"
+        env.ENVIRONMENT="qa"
+
+        ENVIRON = "${env.ENVIRONMENT}"
 
         sh """#!/bin/bash
             set -x
@@ -127,6 +129,8 @@ node {
 }
 
 def apply_chef(){
+
+    println "${ENVIRON}"
 
     regex="^[qa|prod].*[1-2]\$"
     if((env.CHEF_ENVIRONMENT =~ regex).matches()){
