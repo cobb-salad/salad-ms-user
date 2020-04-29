@@ -1,5 +1,6 @@
 import groovy.json.JsonSlurper
 import java.lang.Math
+import java.math.BigDecimal
 
 AMI_VERSION = 0
 
