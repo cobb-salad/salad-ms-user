@@ -140,11 +140,8 @@ def jsontest(){
 
     ASGINFO=readFile("/var/lib/jenkins/jsontmp")
     def jsonSlurper = new JsonSlurper()
-    def data = jsonSlurper.parseText(ASGINFO)
-    def ASGINFOObj = readJSON text: ASGINFO
-
-    min = data.get('MinSize')
-    println "${min}"
+    def ASGINFOObj = jsonSlurper.parseText(ASGINFO)
+//     def ASGINFOObj = readJSON text: ASGINFO
 
     MINSIZE = ASGINFOObj.get('MinSize')
     MAXSIZE = ASGINFOObj.get('MaxSize')
