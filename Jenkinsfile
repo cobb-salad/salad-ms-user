@@ -151,7 +151,7 @@ def jsontest(){
     ONDEMANDRATIO = 0
 
     temp = ONDEMANDCAPACITY / MINSIZE
-    temp = Math.round(temp)
+    temp = temp.round(0)
 
 
 
