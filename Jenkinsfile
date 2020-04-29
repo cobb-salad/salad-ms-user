@@ -1,6 +1,4 @@
 import groovy.json.JsonSlurper
-import java.lang.Math
-import java.math.BigDecimal
 
 AMI_VERSION = 0
 
@@ -160,7 +158,7 @@ def jsontest(){
     ONDEMANDRATIO = 0
 
     temp = ONDEMANDCAPACITY / MINSIZE
-    tmp = Math.round(temp)
+    tmp = temp.round()
 
     println "${tmp}"
 }
