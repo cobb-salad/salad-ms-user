@@ -1,4 +1,5 @@
 import groovy.json.JsonSlurper
+import java.math.MathContext
 
 AMI_VERSION = 0
 
