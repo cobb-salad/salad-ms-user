@@ -140,8 +140,7 @@ def jsontest(){
     def jsonObj = readJSON text: ASGINFO
 
     println jsonObj['DesiredCapacity']
-    println jsonObj.get('DesiredCapacity')
-//     println jsonObj['DesiredCapacity']['MixedInstancesPolicy']['InstancesDistribution']['OnDemandBaseCapacity']
+    println jsonObj.get('DesiredCapacity').get('MixedInstancesPolicy').get('InstancesDistribution').get('OnDemandBaseCapacity')
 
 }
 
