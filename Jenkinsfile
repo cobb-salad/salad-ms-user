@@ -137,8 +137,10 @@ node {
 def jsontest(){
 
     ASGINFO=readFile("/var/lib/jenkins/jsontmp")
+    def jsonObj = readJSON text: ASGINFO
 
-    println "${ASGINFO}"
+    println "jsonObj['AutoScalingGroups']"
+
 }
 
 
