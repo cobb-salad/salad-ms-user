@@ -141,6 +141,15 @@ def jsontest(){
 
     println jsonObj['DesiredCapacity']
     println jsonObj.get('MixedInstancesPolicy').get('InstancesDistribution').get('OnDemandBaseCapacity')
+        MINSIZE = ASGINFOObj.get('MinSize')
+        MAXSIZE = ASGINFOObj.get('MaxSize')
+        ONDEMANDCAPACITY = ASGINFOObj.get('MixedInstancesPolicy').get('InstancesDistribution').get('OnDemandBaseCapacity')
+        ONDEMANDRATIO = ASGINFOObj.get('MixedInstancesPolicy').get('InstancesDistribution').get('OnDemandPercentageAboveBaseCapacity')
+
+        println "${MINSIZE}"
+        println "${MAXSIZE}"
+        println "${ONDEMANDCAPACITY}"
+        println "${ONDEMANDRATIO}"
 
 }
 
