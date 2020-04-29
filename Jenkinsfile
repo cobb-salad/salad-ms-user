@@ -150,11 +150,15 @@ def jsontest(){
     ONDEMANDCAPACITY = 3
     ONDEMANDRATIO = 0
 
-    temp = (ONDEMANDCAPACITY / MINSIZE).trunc()
+    temp = ONDEMANDCAPACITY / MINSIZE
+    tempround = temp.round()
+    temptrunc = temp.trunc()
 
 
 
-    println "${temp}"
+
+    println "${tempround}"
+    println "${temptrunc}"
 
 
 
