@@ -158,9 +158,11 @@ def jsontest(){
     ONDEMANDCAPACITY = 3
     ONDEMANDRATIO = 0
 
-    temp = ONDEMANDCAPACITY / MINSIZE
+    temp = (ONDEMANDCAPACITY / MINSIZE) + 1
 
-    tmp = ((int) temp * 100)/100
+    tmp = temp.setScale(1, BigDecimal.ROUND_HALF_UP)
+
+//     tmp = ((int) temp * 100)/100
 
     println "${tmp}"
 
