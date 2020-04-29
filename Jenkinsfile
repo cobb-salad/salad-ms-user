@@ -160,8 +160,10 @@ def jsontest(){
 
     temp = ONDEMANDCAPACITY / MINSIZE
 
+    tmp = ((int) temp * 100)/100
 
-    println temp.class.name
+    println "${tmp}"
+
 }
 
 
