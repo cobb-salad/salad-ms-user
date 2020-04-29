@@ -159,9 +159,9 @@ def jsontest(){
     ONDEMANDRATIO = 0
 
     temp = ONDEMANDCAPACITY / MINSIZE
-    tmp = temp.round()
 
-    println "${tmp}"
+
+    println temp.class.name
 }
 
 
