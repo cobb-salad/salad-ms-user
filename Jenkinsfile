@@ -128,6 +128,8 @@ node {
         """
 
 //         apply_chef()
+
+        jsontest()
     }
 
 }
