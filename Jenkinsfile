@@ -150,9 +150,9 @@ def jsontest(){
     ONDEMANDCAPACITY = 3
     ONDEMANDRATIO = 0
 
-    temp = ONDEMANDCAPACITY / MINSIZE
-    tempround = temp.round()
-    temptrunc = temp.trunc()
+    assert temp = ONDEMANDCAPACITY / MINSIZE
+    assert tempround = temp.round()
+    assert temptrunc = temp.trunc()
 
 
 
