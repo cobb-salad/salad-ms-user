@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 AMI_VERSION = 0
 
 
