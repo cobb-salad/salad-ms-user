@@ -137,7 +137,11 @@ node {
 def jsontest(){
 
     ASGINFO=readFile("/var/lib/jenkins/jsontmp")
+    def data = new JsonSlurperClassic().parseText(ASGINFO)
     def ASGINFOObj = readJSON text: ASGINFO
+
+    min = data.get('MinSize')
+    println "${min}"
 
     MINSIZE = ASGINFOObj.get('MinSize')
     MAXSIZE = ASGINFOObj.get('MaxSize')
@@ -151,9 +155,6 @@ def jsontest(){
     ONDEMANDRATIO = 0
 
     temp = ONDEMANDCAPACITY / MINSIZE
-    asd = Math.round(temp)
-
-    println "${asd}"
 }
 
 
