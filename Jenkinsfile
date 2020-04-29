@@ -137,10 +137,8 @@ node {
 def jsontest(){
 
     ASGINFO=readFile("/var/lib/jenkins/jsontmp")
-    def jsonObj = readJSON text: ASGINFO
+    def ASGINFOObj = readJSON text: ASGINFO
 
-    println jsonObj['DesiredCapacity']
-    println jsonObj.get('MixedInstancesPolicy').get('InstancesDistribution').get('OnDemandBaseCapacity')
         MINSIZE = ASGINFOObj.get('MinSize')
         MAXSIZE = ASGINFOObj.get('MaxSize')
         ONDEMANDCAPACITY = ASGINFOObj.get('MixedInstancesPolicy').get('InstancesDistribution').get('OnDemandBaseCapacity')
