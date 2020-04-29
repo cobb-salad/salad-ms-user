@@ -152,6 +152,10 @@ def apply_chef(){
         set +x
     '''
 
+    MIN=sh "echo test"
+
+    println "${MIN}"
+
 }
 
 def check() {
