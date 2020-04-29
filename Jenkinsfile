@@ -1,5 +1,4 @@
 import groovy.json.JsonSlurper
-import java.math.MathContext
 
 AMI_VERSION = 0
 
@@ -155,8 +154,7 @@ def jsontest(){
     ONDEMANDCAPACITY = 3
     ONDEMANDRATIO = 0
 
-    temp = (ONDEMANDCAPACITY / MINSIZE) + 1
-    CALCULATEDMINSIZE = (MINSIZE * 2) * (ONDEMANDCAPACITY / MINSIZE + 1)
+    CALCULATEDMINSIZE = (MINSIZE * 2) * ((ONDEMANDCAPACITY / MINSIZE) + 1)
 
 //     tmp = ((int) temp * 100)/100
 
