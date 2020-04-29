@@ -147,7 +147,14 @@ def jsontest(){
 
     CALCULATEDMINSIZE = MINSIZE + MAXSIZE
 
-    println "${CALCULATEDMINSIZE}"
+    ONDEMANDCAPACITY = 3
+    ONDEMANDRATIO = 0
+
+    temp = ONDEMANDCAPACITY / MINSIZE
+
+
+
+    println "${temp}"
 
 
 
