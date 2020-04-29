@@ -139,15 +139,17 @@ def jsontest(){
     ASGINFO=readFile("/var/lib/jenkins/jsontmp")
     def ASGINFOObj = readJSON text: ASGINFO
 
-        MINSIZE = ASGINFOObj.get('MinSize')
-        MAXSIZE = ASGINFOObj.get('MaxSize')
-        ONDEMANDCAPACITY = ASGINFOObj.get('MixedInstancesPolicy').get('InstancesDistribution').get('OnDemandBaseCapacity')
-        ONDEMANDRATIO = ASGINFOObj.get('MixedInstancesPolicy').get('InstancesDistribution').get('OnDemandPercentageAboveBaseCapacity')
+    MINSIZE = ASGINFOObj.get('MinSize')
+    MAXSIZE = ASGINFOObj.get('MaxSize')
+    ONDEMANDCAPACITY = ASGINFOObj.get('MixedInstancesPolicy').get('InstancesDistribution').get('OnDemandBaseCapacity')
+    ONDEMANDRATIO = ASGINFOObj.get('MixedInstancesPolicy').get('InstancesDistribution').get('OnDemandPercentageAboveBaseCapacity')
 
-        println "${MINSIZE}"
-        println "${MAXSIZE}"
-        println "${ONDEMANDCAPACITY}"
-        println "${ONDEMANDRATIO}"
+
+    CALCULATEDMINSIZE = MINSIZE + MAXSIZE
+
+    println "${CALCULATEDMINSIZE}"
+
+
 
 }
 
