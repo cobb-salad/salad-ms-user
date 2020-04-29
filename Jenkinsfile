@@ -127,10 +127,18 @@ node {
             set +x
         """
 
-        apply_chef()
+//         apply_chef()
     }
 
 }
+
+def jsontest(){
+
+    ASGINFO=readFile("/var/lib/jenkins/jsontmp")
+
+    println "${ASGINFO}"
+}
+
 
 def apply_chef(){
 
