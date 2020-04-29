@@ -137,7 +137,8 @@ node {
 def jsontest(){
 
     ASGINFO=readFile("/var/lib/jenkins/jsontmp")
-    def data = new JsonSlurperClassic().parseText(ASGINFO)
+    def jsonSlurper = new JsonSlurper()
+    def data = jsonSlurper.parseText(ASGINFO)
     def ASGINFOObj = readJSON text: ASGINFO
 
     min = data.get('MinSize')
