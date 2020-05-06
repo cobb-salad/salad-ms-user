@@ -164,7 +164,11 @@ def jsontest(){
 
 def test(){
 
-    def props = readJSON file: "/var/lib/jenkins/jsontmp"
+    sh '''
+        echo "/var/lib/jenkins/jsontmp" > jsontest.out
+    '''
+
+    def props = readJSON file: 'jsontest.out'
     MINSIZE = props.MinSize
     ONDEMANDCAPACITY = props.MixedInstancesPolicy.InstancesDistribution.OnDemandBaseCapacity
 
