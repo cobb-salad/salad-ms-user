@@ -132,6 +132,7 @@ node {
 //         apply_chef()
 
         jsontest()
+        test()
     }
 
 }
@@ -157,11 +158,9 @@ def jsontest(){
     CALCULATEDMINSIZE = ((int) CALCULATEDMINSIZE * 100)/100
     CALCULATEDONDEMANDRATIO = (int)((ONDEMANDCAPACITY/MINSIZE) *100)
 
-    println "${CALCULATEDONDEMANDRATIO}"
+}
 
-    sh '''
-        echo "test"
-    '''
+def test(){
 
     println "${CALCULATEDONDEMANDRATIO}"
 
