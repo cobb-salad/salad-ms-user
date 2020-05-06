@@ -137,7 +137,6 @@ node {
 
 }
 
-@NonCPS
 def jsontest(){
 
     ASGINFO=readFile("/var/lib/jenkins/jsontmp")
@@ -162,8 +161,14 @@ def jsontest(){
 
 def test(){
 
-    println "${CALCULATEDONDEMANDRATIO}"
+    println "${env.CALCULATEDONDEMANDRATIO}"
 
+
+
+    sh '''
+        echo $CALCULATEDONDEMANDRATIO
+
+    '''
 }
 
 
