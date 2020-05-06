@@ -150,6 +150,7 @@ def jsontest(){
 
     ONDEMANDCAPACITY = 3
     ONDEMANDRATIO = 0
+    OPTIONARGS = ""
 
     CALCULATEDMINSIZE = (MINSIZE * 2) * ((ONDEMANDCAPACITY / MINSIZE) + 1) + 1
 
@@ -157,7 +158,14 @@ def jsontest(){
 
     CALCULATEDONDEMANDRATIO = (int)((ONDEMANDCAPACITY/MINSIZE) *100)
 
+    if(ONDEMANDCAPACITY != 0){
+
+        OPTIONARGS = "--max-size \$CALCULATEDMAXSIZE --mixed-instances-policy \'{\"InstancesDistribution\":{\"OnDemandPercentageAboveBaseCapacity\":\$CALCULATEDONDEMANDRATIO}}\'"
+
+    }
+
     println "${CALCULATEDONDEMANDRATIO}"
+    println "${OPTIONARGS}"
 
 }
 
