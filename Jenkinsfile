@@ -167,11 +167,6 @@ def jsontest(){
 
     env.AWSCLI_OPTIONARGS = "${OPTIONARGS}"
 
-    sh '''#!/bin/bash
-        set -x
-
-        set +x
-    '''
 
 }
 
