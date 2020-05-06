@@ -165,7 +165,7 @@ def jsontest(){
 def test(){
 
     sh '''
-        echo "/var/lib/jenkins/jsontmp" > jsontest.out
+        cat "/var/lib/jenkins/jsontmp" > jsontest.out
     '''
 
     def props = readJSON file: './jsontest.out'
