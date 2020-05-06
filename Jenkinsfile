@@ -159,6 +159,9 @@ def jsontest(){
 
     env.CALCULATEDONDEMANDRATIO = "${CALCULATEDONDEMANDRATIO}"
 
+   jsonSlurper.close()
+
+
 }
 
 def test(){
