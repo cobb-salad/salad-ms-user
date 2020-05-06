@@ -157,9 +157,9 @@ def jsontest(){
     CALCULATEDONDEMANDRATIO = (int)((ONDEMANDCAPACITY/MINSIZE) *100)
     println "${CALCULATEDONDEMANDRATIO}"
 
-    sh """
+    sh '''
         echo "test"
-    """
+    '''
 
     println "${CALCULATEDONDEMANDRATIO}"
 
