@@ -170,7 +170,7 @@ def jsontest(){
     sh '''#!/bin/bash
         set -x
 
-        echo $OPTIONARGS
+        echo "$OPTIONARGS"
 
         set +x
     '''
