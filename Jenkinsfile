@@ -141,11 +141,10 @@ def jsontest(){
 
     ASGINFO=readFile("/var/lib/jenkins/jsontmp")
     jsonSlurper = new JsonSlurper()
-    ASGINFOObj = jsonSlurper.parseText(ASGINFO)
-//     def ASGINFOObj = readJSON text: ASGINFO
+    object = jsonSlurper.parseText(ASGINFO)
 
-    if(ASGINFOObj instanceof groovy.json.internal.LazyMap) {
-       ASGINFOObj = new HashMap<>(ASGINFOObj)
+    if(object instanceof groovy.json.internal.LazyMap) {
+       ASGINFOObj = new HashMap<>(object)
     }
 
     MINSIZE = ASGINFOObj.get('MinSize')
