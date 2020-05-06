@@ -164,14 +164,9 @@ def jsontest(){
 
 def test(){
 
-    println "${env.CALCULATEDONDEMANDRATIO}"
+    def props = readJSON file: "/var/lib/jenkins/jsontmp"
+    MINSIZE = props.MinSize
 
-
-
-    sh '''
-        echo $CALCULATEDONDEMANDRATIO
-
-    '''
 }
 
 
