@@ -165,12 +165,12 @@ def jsontest(){
     println "${CALCULATEDONDEMANDRATIO}"
     println "${OPTIONARGS}"
 
-    env.OPTIONARGS = "${OPTIONARGS}"
+    env.AWSCLI_OPTIONARGS = "${OPTIONARGS}"
 
     sh '''#!/bin/bash
         set -x
 
-        echo "$OPTIONARGS"
+        echo "$AWSCLI_OPTIONARGS"
 
         set +x
     '''
