@@ -131,8 +131,8 @@ node {
 
 //         apply_chef()
 
-        jsontest()
-//         test()
+//         jsontest()
+        test()
     }
 
 }
@@ -204,6 +204,8 @@ def test(){
 
     println "${MINSIZE}"
     println "${ONDEMANDCAPACITY}"
+
+    return output
 
 }
 
