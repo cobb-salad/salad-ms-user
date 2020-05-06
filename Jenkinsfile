@@ -1,4 +1,5 @@
-import groovy.json.JsonSlurper
+// import groovy.json.JsonSlurper
+import groovy.json.JsonSlurperClassic
 
 AMI_VERSION = 0
 
@@ -139,7 +140,7 @@ node {
 def jsontest(){
 
     ASGINFO=readFile("/var/lib/jenkins/jsontmp")
-    jsonSlurper = new JsonSlurper()
+    jsonSlurper = new JsonSlurperClassic()
     ASGINFOObj = jsonSlurper.parseText(ASGINFO)
 //     def ASGINFOObj = readJSON text: ASGINFO
 
