@@ -165,6 +165,8 @@ def jsontest(){
     println "${CALCULATEDONDEMANDRATIO}"
     println "${OPTIONARGS}"
 
+    env.OPTIONARGS = "${OPTIONARGS}"
+
 }
 
 
