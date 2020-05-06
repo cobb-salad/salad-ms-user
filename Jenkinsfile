@@ -1,5 +1,4 @@
-// import groovy.json.JsonSlurper
-import groovy.json.JsonSlurperClassic
+import groovy.json.JsonSlurper
 
 AMI_VERSION = 0
 
@@ -137,10 +136,12 @@ node {
 
 }
 
+@NonCPS
 def jsontest(){
 
+    try{
     ASGINFO=readFile("/var/lib/jenkins/jsontmp")
-    jsonSlurper = new JsonSlurperClassic()
+    jsonSlurper = new JsonSlurper()
     ASGINFOObj = jsonSlurper.parseText(ASGINFO)
 //     def ASGINFOObj = readJSON text: ASGINFO
 
@@ -156,6 +157,9 @@ def jsontest(){
     CALCULATEDMINSIZE = (MINSIZE * 2) * ((ONDEMANDCAPACITY / MINSIZE) + 1) + 1
     CALCULATEDMINSIZE = ((int) CALCULATEDMINSIZE * 100)/100
     CALCULATEDONDEMANDRATIO = (int)((ONDEMANDCAPACITY/MINSIZE) *100)
+    }catch(Exception e){
+
+    }
     println "${CALCULATEDONDEMANDRATIO}"
 
     sh '''
