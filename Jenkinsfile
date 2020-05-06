@@ -144,6 +144,10 @@ def jsontest(){
     ASGINFOObj = jsonSlurper.parseText(ASGINFO)
 //     def ASGINFOObj = readJSON text: ASGINFO
 
+    if(ASGINFOObj instanceof groovy.json.internal.LazyMap) {
+       ASGINFOObj = new HashMap<>(ASGINFOObj)
+    }
+
     MINSIZE = ASGINFOObj.get('MinSize')
     MAXSIZE = ASGINFOObj.get('MaxSize')
     ONDEMANDCAPACITY = ASGINFOObj.get('MixedInstancesPolicy').get('InstancesDistribution').get('OnDemandBaseCapacity')
@@ -158,10 +162,6 @@ def jsontest(){
     CALCULATEDONDEMANDRATIO = (int)((ONDEMANDCAPACITY/MINSIZE) *100)
 
     env.CALCULATEDONDEMANDRATIO = "${CALCULATEDONDEMANDRATIO}"
-
-   jsonSlurper.close()
-
-
 }
 
 def test(){
