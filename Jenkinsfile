@@ -137,6 +137,7 @@ node {
 
 }
 
+@NonCPS
 def jsontest(){
 
     ASGINFO=readFile("/var/lib/jenkins/jsontmp")
