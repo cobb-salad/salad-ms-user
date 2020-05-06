@@ -170,8 +170,6 @@ def jsontest(){
     sh '''#!/bin/bash
         set -x
 
-        echo "$AWSCLI_OPTIONARGS"
-
         set +x
     '''
 
