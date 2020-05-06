@@ -167,6 +167,14 @@ def jsontest(){
 
     env.OPTIONARGS = "${OPTIONARGS}"
 
+    sh '''#!/bin/bash
+        set -x
+
+        echo test $OPTIONARGS
+
+        set +x
+    '''
+
 }
 
 
