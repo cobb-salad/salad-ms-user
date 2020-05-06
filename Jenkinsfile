@@ -163,9 +163,9 @@ def jsontest(){
 //     }
 
     println "${CALCULATEDONDEMANDRATIO}"
-    println "${OPTIONARGS}"
+//     println "${OPTIONARGS}"
 
-    env.AWSCLI_OPTIONARGS = "${OPTIONARGS}"
+//     env.AWSCLI_OPTIONARGS = "${OPTIONARGS}"
 
     sh """
 
