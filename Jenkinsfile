@@ -166,8 +166,10 @@ def test(){
 
     def props = readJSON file: "/var/lib/jenkins/jsontmp"
     MINSIZE = props.MinSize
+    ONDEMANDCAPACITY = props.MixedInstancesPolicy.InstancesDistribution.OnDemandBaseCapacity
 
     println "${MINSIZE}"
+    println "${ONDEMANDCAPACITY}"
 
 }
 
