@@ -137,6 +137,27 @@ node {
 
 }
 
+@NonCPS
+def getASGINFO(){
+
+ def ASGINFOObj = [:]
+
+ try{
+    env.ASGINFO = "/var/lib/jenkins/jsontmp"
+//     def ASGINFOObj = readJSON file: ASGINFO
+    ASGINFO=readFile("/var/lib/jenkins/jsontmp")
+    def object= new JsonSlurper().parseText(ASGINFO)
+//     def ASGINFOObj = jsonSlurper.parseText(ASGINFO)
+
+    ASGINFOObj.putAll(object)
+
+ } catch (e){
+    println "error"
+ }
+
+ return ASGINFOObj
+}
+
 def jsontest(){
 
     def ASGINFOObj = [:]
@@ -192,21 +213,9 @@ def jsontest(){
 
 def test(){
 
-    output = "jsontest.out"
-
-    sh '''
-        cat "/var/lib/jenkins/jsontmp" > jsontest.out
-    '''
-
-    def props = readJSON file: output
-    MINSIZE = props.MinSize
-    ONDEMANDCAPACITY = props.MixedInstancesPolicy.InstancesDistribution.OnDemandBaseCapacity
-
+    asginfo = getASGINFO()
+    MINSIZE = asginfo.get('MinSize')
     println "${MINSIZE}"
-    println "${ONDEMANDCAPACITY}"
-
-    return output
-
 }
 
 
