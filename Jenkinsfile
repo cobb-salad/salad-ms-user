@@ -131,8 +131,8 @@ node {
 
 //         apply_chef()
 
-        jsontest()
-//         test()
+//         jsontest()
+        test()
     }
 
 }
