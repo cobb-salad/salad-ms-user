@@ -157,7 +157,7 @@ def jsontest(){
 
     ONDEMANDCAPACITY = 3
     ONDEMANDRATIO = 0
-//     OPTIONARGS = ""
+    OPTIONARGS = ""
 
     CALCULATEDMINSIZE = (MINSIZE * 2) * ((ONDEMANDCAPACITY / MINSIZE) + 1) + 1
     CALCULATEDMINSIZE = ((int) CALCULATEDMINSIZE * 100)/100
@@ -167,11 +167,16 @@ def jsontest(){
 
     println "${CALCULATEDONDEMANDRATIO}"
 
+    env.OPTIONARGS = "${OPTIONARGS}"
+
 
     sh '''#!/bin/bash
+        set -x
 
         echo $CALCULATEDONDEMANDRATIO
+        echo $OPTIONARGS
 
+        set +x
     '''
 }
 
