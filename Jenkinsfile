@@ -139,7 +139,7 @@ node {
 
 def jsontest(){
 
-    ASGINFO = "/var/lib/jenkins/jsontmp"
+    env.ASGINFO = "/var/lib/jenkins/jsontmp"
     def ASGINFOObj = readJSON file: ASGINFO
 //     ASGINFO=readFile("/var/lib/jenkins/jsontmp")
 //     def jsonSlurper = new JsonSlurper()
