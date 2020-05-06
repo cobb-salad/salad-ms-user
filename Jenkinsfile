@@ -167,6 +167,11 @@ def jsontest(){
 
     env.AWSCLI_OPTIONARGS = "${OPTIONARGS}"
 
+    sh '''
+
+        echo "test"
+
+    '''
 
 }
 
