@@ -173,6 +173,8 @@ def jsontest(){
     sh '''#!/bin/bash
         set -x
 
+        echo test $CALCULATEDONDEMANDRATIO
+
         echo $CALCULATEDONDEMANDRATIO
         echo $OPTIONARGS
 
