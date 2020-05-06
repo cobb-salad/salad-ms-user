@@ -137,23 +137,27 @@ node {
 
 }
 
+@NonCPS
 def jsontest(){
 
     env.ASGINFO = "/var/lib/jenkins/jsontmp"
-    def ASGINFOObj = readJSON file: ASGINFO
-//     ASGINFO=readFile("/var/lib/jenkins/jsontmp")
-//     def jsonSlurper = new JsonSlurper()
+//     def ASGINFOObj = readJSON file: ASGINFO
+    ASGINFO=readFile("/var/lib/jenkins/jsontmp")
+    def object= new JsonSlurper().parseText(ASGINFO)
 //     def ASGINFOObj = jsonSlurper.parseText(ASGINFO)
 
-//     MINSIZE = ASGINFOObj.get('MinSize')
-//     MAXSIZE = ASGINFOObj.get('MaxSize')
-//     ONDEMANDCAPACITY = ASGINFOObj.get('MixedInstancesPolicy').get('InstancesDistribution').get('OnDemandBaseCapacity')
-//     ONDEMANDRATIO = ASGINFOObj.get('MixedInstancesPolicy').get('InstancesDistribution').get('OnDemandPercentageAboveBaseCapacity')
+    def ASGINFOObj = [:]
+    ASGINFOObj.putAll(object)
 
-    MINSIZE = ASGINFOObj.MinSize
-    MAXSIZE = ASGINFOObj.MaxSize
-    ONDEMANDCAPACITY = ASGINFOObj.MixedInstancesPolicy.InstancesDistribution.OnDemandBaseCapacity
-    ONDEMANDRATIO = ASGINFOObj.MixedInstancesPolicy.InstancesDistribution.OnDemandPercentageAboveBaseCapacity
+    MINSIZE = ASGINFOObj.get('MinSize')
+    MAXSIZE = ASGINFOObj.get('MaxSize')
+    ONDEMANDCAPACITY = ASGINFOObj.get('MixedInstancesPolicy').get('InstancesDistribution').get('OnDemandBaseCapacity')
+    ONDEMANDRATIO = ASGINFOObj.get('MixedInstancesPolicy').get('InstancesDistribution').get('OnDemandPercentageAboveBaseCapacity')
+
+//     MINSIZE = ASGINFOObj.MinSize
+//     MAXSIZE = ASGINFOObj.MaxSize
+//     ONDEMANDCAPACITY = ASGINFOObj.MixedInstancesPolicy.InstancesDistribution.OnDemandBaseCapacity
+//     ONDEMANDRATIO = ASGINFOObj.MixedInstancesPolicy.InstancesDistribution.OnDemandPercentageAboveBaseCapacity
 
     ONDEMANDCAPACITY = 3
     ONDEMANDRATIO = 0
