@@ -138,17 +138,12 @@ node {
 }
 
 @NonCPS
-def getASGINFO(){
+def getASGINFO(jsonString){
 
  def ASGINFOObj = [:]
 
  try{
-    env.ASGINFO = "/var/lib/jenkins/jsontmp"
-//     def ASGINFOObj = readJSON file: ASGINFO
-    ASGINFO=readFile("/var/lib/jenkins/jsontmp")
-    def object= new JsonSlurper().parseText(ASGINFO)
-//     def ASGINFOObj = jsonSlurper.parseText(ASGINFO)
-
+    def object= new JsonSlurper().parseText(jsonString)
     ASGINFOObj.putAll(object)
 
  } catch (e){
@@ -213,7 +208,8 @@ def jsontest(){
 
 def test(){
 
-    asginfo = getASGINFO()
+    jsonString=readFile("/var/lib/jenkins/jsontmp")
+    asginfo = getASGINFO(jsonString)
     MINSIZE = asginfo.get('MinSize')
     println "${MINSIZE}"
 }
