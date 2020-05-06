@@ -153,24 +153,12 @@ def jsontest(){
     OPTIONARGS = ""
 
     CALCULATEDMINSIZE = (MINSIZE * 2) * ((ONDEMANDCAPACITY / MINSIZE) + 1) + 1
-
     CALCULATEDMINSIZE = ((int) CALCULATEDMINSIZE * 100)/100
-
     CALCULATEDONDEMANDRATIO = (int)((ONDEMANDCAPACITY/MINSIZE) *100)
-
-//     if(ONDEMANDCAPACITY != 0){
-//         OPTIONARGS = "--max-size \$CALCULATEDMAXSIZE --mixed-instances-policy \'{\"InstancesDistribution\":{\"OnDemandPercentageAboveBaseCapacity\":\$CALCULATEDONDEMANDRATIO}}\'"
-//     }
-
     println "${CALCULATEDONDEMANDRATIO}"
-//     println "${OPTIONARGS}"
-
-//     env.AWSCLI_OPTIONARGS = "${OPTIONARGS}"
 
     sh """
-
         echo "test"
-
     """
 
     println "${CALCULATEDONDEMANDRATIO}"
