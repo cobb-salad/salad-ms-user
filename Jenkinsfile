@@ -132,7 +132,7 @@ node {
 //         apply_chef()
 
         jsontest()
-//         test()
+        test()
     }
 
 }
