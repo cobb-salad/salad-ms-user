@@ -139,15 +139,20 @@ node {
 
 def jsontest(){
 
+    def ASGINFOObj = [:]
+
+    try{
     env.ASGINFO = "/var/lib/jenkins/jsontmp"
 //     def ASGINFOObj = readJSON file: ASGINFO
     ASGINFO=readFile("/var/lib/jenkins/jsontmp")
     def object= new JsonSlurper().parseText(ASGINFO)
 //     def ASGINFOObj = jsonSlurper.parseText(ASGINFO)
 
-    def ASGINFOObj = [:]
     ASGINFOObj.putAll(object)
 
+    } catch (e){
+        println "error"
+    }
     MINSIZE = ASGINFOObj.get('MinSize')
     MAXSIZE = ASGINFOObj.get('MaxSize')
     ONDEMANDCAPACITY = ASGINFOObj.get('MixedInstancesPolicy').get('InstancesDistribution').get('OnDemandBaseCapacity')
