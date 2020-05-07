@@ -208,10 +208,12 @@ def jsontest(){
 
 def test(){
 
-    jsonString=readFile("/var/lib/jenkins/jsontmp")
-    asginfo = getASGINFO(jsonString)
-    MINSIZE = asginfo.get('MinSize')
-    println "${MINSIZE}"
+    println returnTest()
+
+}
+
+def returnTest(){
+    return readFile("/var/lib/jenkins/jsontmp")
 }
 
 
