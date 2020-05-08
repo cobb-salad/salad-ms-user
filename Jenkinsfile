@@ -204,9 +204,12 @@ def test(){
     MINSIZE = list[0]
     MAXSIZE = list[1]
 
-    CALCULATEDMINSIZE = MINSIZE * 2
+    CMINSIZE = MINSIZE * 2
 
-    println "${CALCULATEDMINSIZE}"
+
+    println "${MINSIZE}"
+    println "${MAXSIZE}"
+    println "${CMINSIZE}"
 
 }
 
