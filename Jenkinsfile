@@ -201,8 +201,8 @@ def test(){
 
     def list = ASGOUT.readLines()
 
-    MINSIZE = list[0]
-    MAXSIZE = list[1]
+    MINSIZE = list[0].trim().toInteger()
+    MAXSIZE = list[1].trim().toInteger()
 
     CMINSIZE = MINSIZE * 2
 
