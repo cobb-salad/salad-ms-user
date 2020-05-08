@@ -137,7 +137,6 @@ node {
 
 }
 
-@NonCPS
 def getASGINFO(jsonString){
 
     env.ASGINFO = "/var/lib/jenkins/jsontmp"
@@ -205,7 +204,9 @@ def jsontest(){
 
 def test(){
 
-    println getASGINFO()
+    MIN=getASGINFO()
+
+    println "${MIN}"
 
 }
 
