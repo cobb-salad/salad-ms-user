@@ -206,7 +206,7 @@ def test(){
 
     CMINSIZE = MINSIZE * 2
 
-
+    println (MINSIZE instanceof String)
     println "${MINSIZE}"
     println "${MAXSIZE}"
     println "${CMINSIZE}"
