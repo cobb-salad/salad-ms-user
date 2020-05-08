@@ -145,13 +145,10 @@ def getASGINFO(jsonString){
         jq '. | .MinSize,.MaxSize,.MixedInstancesPolicy.InstancesDistribution.OnDemandBaseCapacity,.MixedInstancesPolicy.InstancesDistribution.OnDemandBaseCapacity' /var/lib/jenkins/jsontmp > asginfo.out
     '''
 
-    MINSIZE = readFile("asginfo.out")
-    def list = MINSIZE.readLines()
-    println list.size()
-    println list[0]
-    println "${MINSIZE}"
+    ASGOUT = readFile("asginfo.out")
+    def list = ASGOUT.readLines()
 
-    return MINSIZE
+    return ASGOUT
 }
 
 def jsontest(){
@@ -200,9 +197,16 @@ def jsontest(){
 
 def test(){
 
-    MIN=getASGINFO("t")
+    ASGOUT=getASGINFO("t")
 
-    println "${MIN}"
+    def list = ASGOUT.readLines()
+
+    MINSIZE = list[0]
+    MAXSIZE = list[1]
+
+    CALCULATEDMINSIZE = MINSIZE * 2
+
+    println "${CALCULATEDMINSIZE}"
 
 }
 
