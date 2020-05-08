@@ -146,6 +146,8 @@ def getASGINFO(jsonString){
     '''
 
     MINSIZE = readFile("asginfo.out")
+    def list = MINSIZE.readLines()
+    println list.size()
     println "${MINSIZE}"
 
     return MINSIZE
