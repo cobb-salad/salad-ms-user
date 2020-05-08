@@ -140,17 +140,14 @@ node {
 @NonCPS
 def getASGINFO(jsonString){
 
- def ASGINFOObj = [:]
+    env.ASGINFO = "/var/lib/jenkins/jsontmp"
 
- try{
-    def object= new JsonSlurper().parseText(jsonString)
-    ASGINFOObj.putAll(object)
+    sh '''#!/bin/bash
+        jq '.MinSize' $ASGINFO > asginfo.out
+    '''
 
- } catch (e){
-    println "error"
- }
-
- return ASGINFOObj
+    MINSIZE = readFile("asginfo.out")
+    println "${MINSIZE}"
 }
 
 def jsontest(){
@@ -208,7 +205,7 @@ def jsontest(){
 
 def test(){
 
-    println returnTest()
+    println getASGINFO()
 
 }
 
