@@ -147,6 +147,8 @@ def getASGINFO(jsonString){
 
     MINSIZE = readFile("asginfo.out")
     println "${MINSIZE}"
+
+    return MINSIZE
 }
 
 def jsontest(){
