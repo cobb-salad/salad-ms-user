@@ -142,7 +142,7 @@ def getASGINFO(jsonString){
     env.ASGINFO = "/var/lib/jenkins/jsontmp"
 
     sh '''#!/bin/bash
-        jq '.MinSize' $ASGINFO > asginfo.out
+        jq '. | .MinSize,.MaxSize,.MixedInstancesPolicy.InstancesDistribution.OnDemandBaseCapacity' /var/lib/jenkins/jsontmp > asginfo.out
     '''
 
     MINSIZE = readFile("asginfo.out")
