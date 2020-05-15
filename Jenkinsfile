@@ -115,10 +115,6 @@ node {
 
             set +x
         """
-
-//         apply_chef()
-
-//         jsontest()
         test()
     }
 
@@ -184,19 +180,11 @@ def jsontest(){
 
 def test(){
 
-    ASGOUT=getASGINFO("t")
+    // ASGOUT=getASGINFO("t")
+    // def list = ASGOUT.readLines()
 
-    def list = ASGOUT.readLines()
-
-    MINSIZE = list[0].trim().toInteger()
-    MAXSIZE = list[1].trim().toInteger()
-
-    CMINSIZE = MINSIZE * 2
-
-    println (MINSIZE instanceof String)
-    println "${MINSIZE}"
-    println "${MAXSIZE}"
-    println "${CMINSIZE}"
+    MIN=sh(returnStdout: true, script: 'echo test').trim()
+    println "${MIN}"
 
 }
 
@@ -212,9 +200,4 @@ def apply_chef(){
         ./sun-ms-api-${ENVIRONMENT}_version = \"test\"
         set +x
     '''
-
-    MIN=sh "echo test"
-
-    println "${MIN}"
-
 }
