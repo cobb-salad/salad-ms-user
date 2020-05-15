@@ -15,6 +15,7 @@ node {
         AUTO_INCREMENT_AMI_VERSION = "${params.AUTO_INCREMENT_AMI_VERSION}"
         RUN_TASK = "${params.RUN_TASK}"
 
+        println "${BRANCH_NAME}"
         println "${TAG}"
         println "${BUILD_TYPE}"
         println "${SCALA_VERSION}"
