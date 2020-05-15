@@ -90,7 +90,6 @@ node {
         env.TESTVAL2="ttt"
         env.AMI_ID="ami-123456789"
         env.ENVIRONMENT="qa"
-
         ENVIRON = "${env.ENVIRONMENT}"
 
         sh """#!/bin/bash
