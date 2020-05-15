@@ -12,6 +12,7 @@ node {
         RUN_TASK = "${params.RUN_TASK}"
 
         println "${BRANCH_NAME}"
+
         println "${TAG}"
         println "${BUILD_TYPE}"
         println "${SCALA_VERSION}"
@@ -65,13 +66,9 @@ node {
             SBT_ACTION="clean assembly"
 
             sh "ls -la"
-
-
         }else{
-
             BUILD_DIR="build/libs"
             GRADLE_TASK="clean install"
-
         }
     }
 
