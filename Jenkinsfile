@@ -1,8 +1,4 @@
-import groovy.json.JsonSlurper
-
 AMI_VERSION = 0
-
-
 node {
     stage('Parameter Check'){
 
