@@ -218,28 +218,3 @@ def apply_chef(){
     println "${MIN}"
 
 }
-
-def check() {
-
-    println "in check"
-
-    println "${AMI_VERSION}"
-    println "test"
-
-    int VERSION = 0
-    def exist = true
-
-    while(exist == true) {
-
-        println "${VERSION}"
-        if(VERSION == 3){
-            exist = false
-        }else{
-            VERSION = VERSION + 1
-        }
-    }
-
-    println "${VERSION}"
-}
-
-
