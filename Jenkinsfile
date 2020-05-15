@@ -105,14 +105,7 @@ node {
             #echo "sed -i \'s/ami-[^\"]*/ami-123456789/g\' test2" >> change.sh
             echo "sed -i \'s/\\bami-[^\\"]*/$AMI_ID/g\' test2" >> change.sh
             #sed -i 's/[^\"]*/'"$TESTVAL2"'/g' test2
-
-            cat change.sh
-
             ./change.sh
-
-            cat test2
-
-
             set +x
         """
         test()
