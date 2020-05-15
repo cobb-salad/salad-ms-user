@@ -1,7 +1,6 @@
 AMI_VERSION = 0
 node {
     stage('Parameter Check'){
-
         TAG = "${params.TAG}"
         BUILD_TYPE = "${params.BUILD_TYPE}"
         SCALA_VERSION = "${params.SCALA_VERSION}"
