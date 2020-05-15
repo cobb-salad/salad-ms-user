@@ -207,18 +207,6 @@ def returnTest(){
 
 def apply_chef(){
 
-    println "${ENVIRON}"
-
-    regex="^[qa|prod].*[1-2]\$"
-    if((env.CHEF_ENVIRONMENT =~ regex).matches()){
-        ATTRIBUTE="[\"platform-microservice\"][\"$SERVICE\"][\"artifact\"][\"version\"]"
-    }else{
-        ATTRIBUTE="[\"b2c-microservice\"][\"$SERVICE\"][\"artifact\"][\"version\"]"
-    }
-
-
-    println "${ATTRIBUTE}"
-
     sh '''#!/bin/bash
         set -x
         ./sun-ms-api-${ENVIRONMENT}_version = \"test\"
