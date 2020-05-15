@@ -21,10 +21,6 @@ node {
         println "${AUTO_INCREMENT_AMI_VERSION}"
         println "${RUN_TASK}"
 
-        taskSize = RUN_TASK.contains("chef");
-
-        println "${taskSize}"
-
         try{
             if (params.SERVICE == "") {
                 throw new Exception("You must select Service")
