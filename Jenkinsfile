@@ -4,6 +4,7 @@ SCALA_VERSION="2.12"
 ASSEMBLY="-assembly"
 SERIVCE="user"
 AMI_VERSION=0
+
 stage('Parameter Check'){
     node{
         TAG = "${params.TAG}"
@@ -61,7 +62,10 @@ stage("Build Artifact") {
 }
 
 stage("Build AMI") {
+    def autoIncrementAMIInput = input id: 'autoIncrementAMIVersion', message: "Want to auto increment AMI version?", ok: 'Yes', parameters: [string(defaultValue: 'false', description: '', name: 'AUTO_INCREMENT')] 
     node{
+
+        println "${AUTO_INCREMENT}"
 
         if(AMI_VERSION > 0){
             println "AMI_VERSION is greater than 0"
