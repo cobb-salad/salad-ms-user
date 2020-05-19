@@ -77,6 +77,12 @@ stage("Build AMI") {
                 echo $AMI_VERSION
                 echo $AMI
             '''
+
+
+            sh '''
+                echo $AMI_VERSION
+                echo $AMI
+            '''
         }
 
 
