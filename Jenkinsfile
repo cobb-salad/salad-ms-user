@@ -1,6 +1,6 @@
 AMI_VERSION = 0
-node {
-    stage('Parameter Check'){
+stage('Parameter Check'){
+    node{
         TAG = "${params.TAG}"
         BUILD_TYPE = "${params.BUILD_TYPE}"
         SCALA_VERSION = "${params.SCALA_VERSION}"
@@ -28,29 +28,32 @@ node {
             }
         }catch(e){
             currentBuild.result = "FAILURE"
-//             throw(e)
+    //             throw(e)
             println(e)
         }
-
     }
 
-    stage("Git CheckOut", {
-            println "Git CheckOut Started"
-            checkout(
-                    [
-                            $class                           : 'GitSCM',
-                            branches                         : [[name: 'master']],
-                            doGenerateSubmoduleConfigurations: false,
-                            extensions                       : [],
-                            submoduleCfg                     : [],
-                            userRemoteConfigs                : [[credentialsId: 'github_mjkong_ssh', url: 'https://github.com/cobb-salad/salad-ms-user.git']]
-                    ]
-            )
-            println "Git CheckOut End"
-    })
+}
 
-    stage("Build Artifact") {
+stage("Git CheckOut"){
+    node{
+        println "Git CheckOut Started"
+        checkout(
+                [
+                        $class                           : 'GitSCM',
+                        branches                         : [[name: 'master']],
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions                       : [],
+                        submoduleCfg                     : [],
+                        userRemoteConfigs                : [[credentialsId: 'github_mjkong_ssh', url: 'https://github.com/cobb-salad/salad-ms-user.git']]
+                ]
+        )
+        println "Git CheckOut End"
+    }
+}
 
+stage("Build Artifact") {
+    node{
         if (params.BUILD_TYPE == "SBT"){
 
             BUILD_DIR="target/scala-${SCALA_VERSION}"
@@ -65,8 +68,10 @@ node {
             GRADLE_TASK="clean install"
         }
     }
+}
 
-    stage("Build AMI") {
+stage("Build AMI") {
+    node{
 
         if(AMI_VERSION > 0){
             println "AMI_VERSION is greater than 0"
@@ -74,18 +79,17 @@ node {
 
         env.AMI_VERSION="${AMI_VERSION}"
 
-//         userInput = input(
-//             id: 'Proceed1', message: 'AMI_VERSION is ${env.AMI_VERSION} : Do you want to use this version?', parameters: [
-//             [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this']
-//          ])
-//
-//         println "${userInput}"
-
-
-
+    //         userInput = input(
+    //             id: 'Proceed1', message: 'AMI_VERSION is ${env.AMI_VERSION} : Do you want to use this version?', parameters: [
+    //             [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this']
+    //          ])
+    //
+    //         println "${userInput}"
     }
+}
 
-    stage("after build ami"){
+stage("after build ami"){
+    node{
         env.TESTVAL2="ttt"
         env.AMI_ID="ami-123456789"
         env.ENVIRONMENT="qa"
@@ -109,9 +113,7 @@ node {
             set +x
         """
         test()
-        
     }
-
 }
 
 def getASGINFO(jsonString){
