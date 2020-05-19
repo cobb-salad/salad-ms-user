@@ -69,7 +69,7 @@ stage("Build AMI") {
 
         VV=10
 
-        withEnv('AMI_VERSION=${VV}'){
+        withEnv(["AMI_VERSION=${VV}"]){
             sh 'echo $AMI_VERSION'
         }
 
