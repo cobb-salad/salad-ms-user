@@ -67,7 +67,16 @@ stage("Build AMI") {
             println "AMI_VERSION is greater than 0"
         }
 
-        env.AMI_VERSION="${AMI_VERSION}"
+        VV=10
+
+        withEnv('AMI_VERSION=${VV}'){
+            sh 'echo $AMI_VERSION'
+        }
+
+
+        sh '''
+            echo $AMI_VERION
+        '''
 
     //         userInput = input(
     //             id: 'Proceed1', message: 'AMI_VERSION is ${env.AMI_VERSION} : Do you want to use this version?', parameters: [
