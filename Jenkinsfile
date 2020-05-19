@@ -44,6 +44,7 @@ stage("Git CheckOut"){
 }
 
 stage("Build Artifact") {
+    input(message: "Want to build artifact?", ok: 'Yes', parameters: []) 
     node{
         if (params.BUILD_TYPE == "SBT"){
 
@@ -62,7 +63,7 @@ stage("Build Artifact") {
 }
 
 stage("Build AMI") {
-    def autoIncrementAMIInput = input(message: "Want to auto increment AMI version?", 
+    def autoIncrementAMIInput = input(message: "AMI exist!!, Want to auto increment AMI version?", 
                                       ok: 'Yes', 
                                       parameters: [
                                           ]
