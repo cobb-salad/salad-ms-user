@@ -62,7 +62,11 @@ stage("Build Artifact") {
 }
 
 stage("Build AMI") {
-    def autoIncrementAMIInput = input id: 'autoIncrementAMIVersion', message: "Want to auto increment AMI version?", ok: 'Yes', parameters: [string(defaultValue: 'false', description: '', name: 'AUTO_INCREMENT')] 
+    def autoIncrementAMIInput = input(message: "Want to auto increment AMI version?", 
+                                      ok: 'Yes', 
+                                      parameters: [
+                                          ]
+                                      ) 
     node{
 
         println "${autoIncrementAMIInput}"
