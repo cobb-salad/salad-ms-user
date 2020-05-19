@@ -44,7 +44,7 @@ stage("Git CheckOut"){
 }
 
 stage("Build Artifact") {
-    input(message: "Want to build artifact?", ok: 'Yes', parameters: []) 
+    input(message: "Want to build artifact?") 
     node{
         if (params.BUILD_TYPE == "SBT"){
 
