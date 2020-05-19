@@ -1,23 +1,14 @@
 AMI_VERSION = 0
+BUILD_TYPE="SBT"
+SCALA_VERSION="2.12"
+ASSEMBLY="-assembly"
+SERIVCE="user"
+AMI_VERSION=0
 stage('Parameter Check'){
     node{
         TAG = "${params.TAG}"
-        BUILD_TYPE = "${params.BUILD_TYPE}"
-        SCALA_VERSION = "${params.SCALA_VERSION}"
-        ASSEMBLY = "${params.ASSEMBLY}"
-        SERVICE = "${params.SERVICE}"
-        AMI_VERSION = "${params.AMI_VERSION}"
         AUTO_INCREMENT_AMI_VERSION = "${params.AUTO_INCREMENT_AMI_VERSION}"
         RUN_TASK = "${params.RUN_TASK}"
-
-        println "${BRANCH_NAME}"
-        println "${TAG}"
-        println "${BUILD_TYPE}"
-        println "${SCALA_VERSION}"
-        println "${ASSEMBLY}"
-        println "${SERVICE}"
-        println "${AUTO_INCREMENT_AMI_VERSION}"
-        println "${RUN_TASK}"
 
         try{
             if (params.SERVICE == "") {
@@ -32,7 +23,6 @@ stage('Parameter Check'){
             println(e)
         }
     }
-
 }
 
 stage("Git CheckOut"){
