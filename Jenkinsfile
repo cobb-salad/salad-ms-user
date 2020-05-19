@@ -63,15 +63,9 @@ stage("Build Artifact") {
 }
 
 stage("Build AMI") {
-    def autoIncrementAMIInput = input(message: "AMI exist!!, Want to auto increment AMI version?", 
-                                      ok: 'Yes', 
-                                      parameters: [
-                                          ]
-                                      ) 
+    // input(message: "AMI exist!!, Want to auto increment AMI version?") 
+    DEPLOY_SERVERS = input message: '', parameters: [[$class: 'ChoiceParameterDefinition', choices:'SERVER1,SERVER2\nSERVER1\nSERVER2', description: '', name: 'DEPLOY_SERVERS']]
     node{
-
-        println "${autoIncrementAMIInput}"
-
         if(AMI_VERSION > 0){
             println "AMI_VERSION is greater than 0"
         }
