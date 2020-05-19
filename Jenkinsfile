@@ -64,7 +64,21 @@ stage("Build Artifact") {
 
 stage("Build AMI") {
     // input(message: "AMI exist!!, Want to auto increment AMI version?") 
-    DEPLOY_SERVERS = input message: '', parameters: [[$class: 'ChoiceParameterDefinition', choices:'SERVER1,SERVER2\nSERVER1\nSERVER2', description: '', name: 'DEPLOY_SERVERS']]
+    // DEPLOY_SERVERS = input message: '', parametrs: [[$class: 'ChoiceParameterDefinition', choices:'SERVER1,SERVER2\nSERVER1\nSERVER2', description: '', name: 'DEPLOY_SERVERS']]
+    input(message: "choice", parameters: [
+
+         extendedChoice(
+            defaultValue: 'One,Two,Three,Four',
+            description: 'Some description',
+            multiSelectDelimiter: ',',
+            name: 'SAMPLE_EXTENDED_CHOICE',
+            quoteValue: false,
+            saveJSONParameterToFile: false,
+            type: 'PT_CHECKBOX',
+            value:'One,Two,Three,Four,Five,Six,Seven,Eight,Nine,Ten',
+            visibleItemCount: 10
+        )
+    ])
     node{
         if(AMI_VERSION > 0){
             println "AMI_VERSION is greater than 0"
