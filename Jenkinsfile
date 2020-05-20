@@ -62,13 +62,27 @@ stage("Build Artifact") {
     }
 }
 
-parallel 'integration-tests':{
-    node('mvn-3.3'){ 
-        sh 'echo mvn3-3'
+
+parallel worker_1: {
+    stage("worker_1"){
+        node("worker_1"){
+            sh """hostname ; pwd """
+            print "on worker_1"
+        }
     }
-}, 'functional-tests':{
-    node('selenium'){ 
-        sh 'echo selenium'
+},  worker_2: {
+    stage("worker_2"){
+        node("worker_2"){
+            sh """hostname ; pwd """
+            print "on worker_2"
+        }
+    }
+},  worker_3: {
+    stage("worker_3"){
+        node("worker_3"){
+            sh """hostname ; pwd """
+            print "on worker_3"
+        }
     }
 }
 
