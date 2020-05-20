@@ -193,7 +193,7 @@ def prepareBuildStages() {
 
   for (i=1; i<5; i++) {
     def buildParallelMap = [:]
-    for (name in [ 'one', 'two', 'three' ] ) {
+    for (name in [ 'one', 'two'] ) {
       def n = "${name} ${i}"
       buildParallelMap.put(n, prepareOneBuildStage(n))
     }
