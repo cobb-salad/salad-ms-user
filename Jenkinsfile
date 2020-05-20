@@ -65,21 +65,21 @@ stage("Build Artifact") {
 
 parallel worker_1: {
     stage("worker_1"){
-        node("worker_1"){
+        node(){
             sh """hostname ; pwd """
             print "on worker_1"
         }
     }
 },  worker_2: {
     stage("worker_2"){
-        node("worker_2"){
+        node(){
             sh """hostname ; pwd """
             print "on worker_2"
         }
     }
 },  worker_3: {
     stage("worker_3"){
-        node("worker_3"){
+        node(){
             sh """hostname ; pwd """
             print "on worker_3"
         }
