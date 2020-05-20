@@ -205,8 +205,9 @@ def prepareBuildStages() {
 def prepareOneBuildStage(String name) {
   return {
     stage("Build stage:${name}") {
-      println("Building ${name}")
-      sh(script:'sleep 5', returnStatus:true)
+        node{
+            println("Building ${name}")
+        }
     }
   }
 }
