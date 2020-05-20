@@ -62,6 +62,16 @@ stage("Build Artifact") {
     }
 }
 
+parallel 'integration-tests':{
+    node('mvn-3.3'){ 
+        sh 'echo mvn3-3'
+    }
+}, 'functional-tests':{
+    node('selenium'){ 
+        sh 'echo selenium'
+    }
+}
+
 stage("Build AMI") {
     // input(message: "AMI exist!!, Want to auto increment AMI version?") 
     // DEPLOY_SERVERS = input message: '', parametrs: [[$class: 'ChoiceParameterDefinition', choices:'SERVER1,SERVER2\nSERVER1\nSERVER2', description: '', name: 'DEPLOY_SERVERS']]
