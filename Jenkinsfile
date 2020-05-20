@@ -62,6 +62,11 @@ stage("Build Artifact") {
             BUILD_DIR="build/libs"
             GRADLE_TASK="clean install"
         }
+
+
+        ENV = "qa".toUpperCase()
+
+        println "${ENV}"
     }
 }
 stage("pararrel"){
