@@ -74,7 +74,7 @@ stage("Build Artifact") {
     }
 }
 stage ("Parallel Builds") {
-    parallel {
+    parallel (
         "stream1" : {
             stage("stream1"){
                 echo "stream1"
@@ -90,7 +90,7 @@ stage ("Parallel Builds") {
                 echo "stream3"
             }
         }
-    }
+    )
 }
 // stage("pararrel"){
 
