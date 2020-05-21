@@ -8,6 +8,10 @@ AMI_VERSION=0
 def runParallel = true
 def buildStages
 
+QA_REGIONS= ["us-west-2","us-east-1"]
+PROD_REGIONS= ["ap-southeast-1","eu-west-2","us-west-2","us-east-1"]
+
+
 stage('Parameter Check'){
     node{
         TAG = "${params.TAG}"
@@ -63,10 +67,10 @@ stage("Build Artifact") {
             GRADLE_TASK="clean install"
         }
 
+        ami_version = 1
+        println "${AMI_VERSION}"
+        println "${ami_version}"
 
-        ENV = "qa".toUpperCase()
-
-        println "${ENV}"
     }
 }
 stage("pararrel"){
