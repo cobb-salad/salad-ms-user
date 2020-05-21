@@ -73,20 +73,66 @@ stage("Build Artifact") {
 
     }
 }
-stage("pararrel"){
-
-    buildStages = prepareBuildStages()
-    for (builds in buildStages) {
-    if (runParallel) {
-      parallel(builds)
-    } else {
-      // run serially (nb. Map is unordered! )
-      for (build in builds.values()) {
-        build.call()
+stage ("Parallel Builds") {
+    parallel {
+      stage("stream1") {
+        stages {
+          stage("JUnit") {
+            steps {
+              echo "Executing JUnit"
+            }
+          }
+          stage("Firefox") {
+            steps {
+              echo "Executing Firefox"
+            }
+          }
+        }
+      }
+      stage("stream2") {
+        stages {
+          stage("DBUnit") {
+            steps {
+              echo "Executing DBUnit"
+            }
+          }
+          stage("Edge") {
+            steps {
+              echo "Executing Edge"
+            }
+          }
+        }
+      }
+      stage("stream3") {
+        stages {
+          stage("Jasmine") {
+            steps {
+              echo "Executing Jasmine"
+            }
+          }
+          stage("Safari") {
+            steps {
+              echo "Executing Safari"
+            }
+          }
+        }
       }
     }
   }
-}
+// stage("pararrel"){
+
+//     buildStages = prepareBuildStages()
+//     for (builds in buildStages) {
+//     if (runParallel) {
+//       parallel(builds)
+//     } else {
+//       // run serially (nb. Map is unordered! )
+//       for (build in builds.values()) {
+//         build.call()
+//       }
+//     }
+//   }
+// }
 
 
 // parallel worker_1: {
