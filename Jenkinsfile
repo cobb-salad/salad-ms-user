@@ -104,9 +104,15 @@ stage("Build Artifact") {
 stage("pararrel"){
 
     buildStages = prepareBuildStages()
-    for (builds in buildStages) {
-        parallel(builds)
-    }
+    // for (builds in buildStages) {
+    //     parallel(builds)
+    // }
+
+    parallel(
+        for (bbuilds in buildStages){
+           "${n}" : builds
+        }
+    )
 }
 
 
