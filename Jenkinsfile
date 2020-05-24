@@ -69,7 +69,7 @@ stage("parallel test"){
     }
 }
 
-def oneStep(String envToBuild, String regionToBuild){
+def oneStep(envToBuild, regionToBuild){
     return {
         stage("Build AMI: ${envToBuild}-${regionToBuild}"){
             input(message: "Want to build AMI?")
