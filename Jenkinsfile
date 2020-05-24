@@ -48,6 +48,15 @@ stage("Git CheckOut"){
         )
         println "Git CheckOut End"
     }
+
+    withEnv([
+        "testenv=${SCALA_VERSION}"
+    ]){
+        sh '''
+            echo $testenv
+
+        '''
+    }
 }
 
 stage("Build Artifact") {
