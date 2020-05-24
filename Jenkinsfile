@@ -59,6 +59,28 @@ stage("Git CheckOut"){
     }
 }
 
+stage("parallel test"){
+    parallel(
+        "test" : {
+            oneStep("qa","us-east-1")
+        }
+    )
+}
+
+def oneStep(String envToBuild, String regionToBuild){
+    return {
+        stage("Build AMI: ${envToBuild}-${regionToBuild}"){
+            input(message: "Want to build AMI?")
+            node{
+
+                println "${envToBuild}"
+                println "${regionToBuild}"
+                    
+            }
+        }
+    }
+}
+
 // stage("Build Artifact") {
 //     input(message: "Want to build artifact?") 
 //     node{
