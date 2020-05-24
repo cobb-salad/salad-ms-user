@@ -60,11 +60,13 @@ stage("Git CheckOut"){
 }
 
 stage("parallel test"){
+    node{
     parallel(
         "test" : {
             oneStep("qa","us-east-1")
         }
     )
+    }
 }
 
 def oneStep(String envToBuild, String regionToBuild){
