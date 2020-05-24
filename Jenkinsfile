@@ -117,11 +117,6 @@ stage("pararrel"){
     //     parallel(builds)
     // }
 
-    parallel(
-        for (bbuilds in buildStages){
-           "${n}" : builds
-        }
-    )
 }
 
 
