@@ -12,129 +12,128 @@ QA_REGIONS= ["us-west-2","us-east-1"]
 PROD_REGIONS= ["ap-southeast-1","eu-west-2","us-west-2","us-east-1"]
 
 
-stage('Parameter Check'){
-    node{
-        TAG = "${params.TAG}"
-        AUTO_INCREMENT_AMI_VERSION = "${params.AUTO_INCREMENT_AMI_VERSION}"
-        RUN_TASK = "${params.RUN_TASK}"
-
-        try{
-            if (params.SERVICE == "") {
-                throw new Exception("You must select Service")
-            }
-            if (params.TAG == "") {
-                throw new Exception("Enter the artifact version for the build in TAG")
-            }
-        }catch(e){
-            currentBuild.result = "FAILURE"
-    //             throw(e)
-            println(e)
-        }
-    }
-}
-
-stage("Git CheckOut"){
-    node{
-        println "Git CheckOut Started"
-        checkout(
-                [
-                        $class                           : 'GitSCM',
-                        branches                         : [[name: 'master']],
-                        doGenerateSubmoduleConfigurations: false,
-                        extensions                       : [],
-                        submoduleCfg                     : [],
-                        userRemoteConfigs                : [[credentialsId: 'github_mjkong_ssh', url: 'https://github.com/cobb-salad/salad-ms-user.git']]
-                ]
-        )
-        println "Git CheckOut End"
-
-        withEnv([
-            "testenv=${SCALA_VERSION}"
-        ]){
-            sh '''
-                echo $testenv
-
-            '''
-        }
-    }
-}
-
-stage("parallel test"){
-    node{
-    parallel(
-        "test" : {
-            oneStep("qa","us-east-1")
-        }
-    )
-    }
-}
-
-def oneStep(envToBuild, regionToBuild){
-    return {
-        stage("Build AMI: ${envToBuild}-${regionToBuild}"){
-            input(message: "Want to build AMI?")
-            node{
-
-                println "${envToBuild}"
-                println "${regionToBuild}"
-                    
-            }
-        }
-    }
-}
-
-// stage("Build Artifact") {
-//     input(message: "Want to build artifact?") 
+// stage('Parameter Check'){
 //     node{
-//         if (params.BUILD_TYPE == "SBT"){
+//         TAG = "${params.TAG}"
+//         AUTO_INCREMENT_AMI_VERSION = "${params.AUTO_INCREMENT_AMI_VERSION}"
+//         RUN_TASK = "${params.RUN_TASK}"
 
-//             BUILD_DIR="target/scala-${SCALA_VERSION}"
-//             SBT_LAUNCHER="1.5"
-//             JVM_OPTION="-Djavax.net.ssl.trustStore=/etc/pki/ca-trust/extracted/java/cacerts"
-//             SBT_OPTION="-Dsbt.log.noformat=true"
-//             SBT_ACTION="clean assembly"
-
-//             sh "ls -la"
-//         }else{
-//             BUILD_DIR="build/libs"
-//             GRADLE_TASK="clean install"
+//         try{
+//             if (params.SERVICE == "") {
+//                 throw new Exception("You must select Service")
+//             }
+//             if (params.TAG == "") {
+//                 throw new Exception("Enter the artifact version for the build in TAG")
+//             }
+//         }catch(e){
+//             currentBuild.result = "FAILURE"
+//     //             throw(e)
+//             println(e)
 //         }
-
-//         ami_version = 1
-//         println "${AMI_VERSION}"
-//         println "${ami_version}"
-
 //     }
 // }
-// stage ("Parallel Builds") {
-//     parallel (
-//         "stream1" : {
-//             stage("stream1"){
-//                 echo "stream1"
-//             }
-//             stage("stream1-1"){
-//                 echo "stream1-1"
-//             }
-//         },
-//         "stream2" : {
-//             stage("stream2") {
-//                 echo "stream2"
-//             }
-//             stage("stream2-1"){
-//                 echo "stream2-1"
-//             }
-//         },
-//         "stream3" : {
-//             stage("stream3") {
-//                 echo "stream3"
-//             }
-//             stage("stream3-1"){
-//                 echo "stream3-1"
-//             }
+
+// stage("Git CheckOut"){
+//     node{
+//         println "Git CheckOut Started"
+//         checkout(
+//                 [
+//                         $class                           : 'GitSCM',
+//                         branches                         : [[name: 'master']],
+//                         doGenerateSubmoduleConfigurations: false,
+//                         extensions                       : [],
+//                         submoduleCfg                     : [],
+//                         userRemoteConfigs                : [[credentialsId: 'github_mjkong_ssh', url: 'https://github.com/cobb-salad/salad-ms-user.git']]
+//                 ]
+//         )
+//         println "Git CheckOut End"
+
+//         withEnv([
+//             "testenv=${SCALA_VERSION}"
+//         ]){
+//             sh '''
+//                 echo $testenv
+
+//             '''
 //         }
-//     )
+//     }
 // }
 
+// stage("parallel test"){
+//     node{
+//     parallel(
+//         "test" : {
+//             oneStep("qa","us-east-1")
+//         }
+//     )
+//     }
+// }
+
+// def oneStep(envToBuild, regionToBuild){
+//     return {
+//         stage("Build AMI: ${envToBuild}-${regionToBuild}"){
+//             input(message: "Want to build AMI?")
+//             node{
+
+//                 println "${envToBuild}"
+//                 println "${regionToBuild}"
+                    
+//             }
+//         }
+//     }
+// }
+
+// // stage("Build Artifact") {
+// //     input(message: "Want to build artifact?") 
+// //     node{
+// //         if (params.BUILD_TYPE == "SBT"){
+
+// //             BUILD_DIR="target/scala-${SCALA_VERSION}"
+// //             SBT_LAUNCHER="1.5"
+// //             JVM_OPTION="-Djavax.net.ssl.trustStore=/etc/pki/ca-trust/extracted/java/cacerts"
+// //             SBT_OPTION="-Dsbt.log.noformat=true"
+// //             SBT_ACTION="clean assembly"
+
+// //             sh "ls -la"
+// //         }else{
+// //             BUILD_DIR="build/libs"
+// //             GRADLE_TASK="clean install"
+// //         }
+
+// //         ami_version = 1
+// //         println "${AMI_VERSION}"
+// //         println "${ami_version}"
+
+// //     }
+// // }
+stage ("Parallel Builds") {
+    parallel (
+        "stream1" : {
+            stage("stream1"){
+                echo "stream1"
+            }
+            stage("stream1-1"){
+                echo "stream1-1"
+            }
+        },
+        "stream2" : {
+            stage("stream2") {
+                echo "stream2"
+            }
+            stage("stream2-1"){
+                echo "stream2-1"
+            }
+        },
+        "stream3" : {
+            stage("stream3") {
+                echo "stream3"
+            }
+            stage("stream3-1"){
+                echo "stream3-1"
+            }
+        }
+    )
+}
 
 // parallel worker_1: {
 //     stage("worker_1"){
