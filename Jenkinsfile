@@ -106,80 +106,23 @@ PROD_REGIONS= ["ap-southeast-1","eu-west-2","us-west-2","us-east-1"]
 
 // //     }
 // // }
-// stage ("Parallel Builds") {
-//     parallel (
-//         "stream1" : {
-//             node{
-//             stage("stream1"){
-//                 echo "stream1"
-//             }
-//             stage("stream1-1"){
-//                 echo "stream1-1"
-//             }
-//             }
-//         },
-//         "stream2" : {
-//             node{
-//             stage("stream2") {
-//                 echo "stream2"
-//             }
-//             stage("stream2-1"){
-//                 echo "stream2-1"
-//             }
-//             }
-//         },
-//         "stream3" : {
-//             node{
-//             stage("stream3") {
-//                 echo "stream3"
-//             }
-//             stage("stream3-1"){
-//                 echo "stream3-1"
-//             }
-//             }
-//         }
-//     )
-// }
-// stage ("Parallel Builds"){
-//     parallel (
-//         // "stream1" : {
-//         //     node{
-//         //         preparedOneStages("stage1-1")
-//         //         preparedOneStages("stage1-2")
-//         //     }
-//         // },
-//         // "stream2" : {
-//         //     node{
-//         //         preparedOneStages("stage2-1")
-//         //         preparedOneStages("stage2-2")
-//         //     }
-//         // }
-
-//         node {
-//             stage("stage1"){
-//                 println "stage1"
-//             }
-//         }
-//         node {
-//             stage("stage2"){
-//                 println "stage2"
-//             }
-//         }
-//     )
-// }
-
-buildStages = []
-stages = [:]
-
-buildStages.add(preparedOneStages("stage1"))
-buildStages.add(preparedOneStages("stage2"))
-
-stages.put("parallel1", prepareOneParallel("parallel"))
-stage("parrallel"){
-    node{
-        stages
-    }
+stage ("Parallel Builds"){
+    parallel (
+        "stream1" : {
+            node{
+                preparedOneStages("stage1-1").call()
+                preparedOneStages("stage1-2").call()
+            }
+        },
+        "stream2" : {
+            node{
+                preparedOneStages("stage2-1").call()
+                preparedOneStages("stage2-2").call()
+            }
+        }
+    )
 }
+
 def prepareOneParallel(String paName){
     return {
         node{
