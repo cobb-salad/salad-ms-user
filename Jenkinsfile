@@ -142,16 +142,27 @@ PROD_REGIONS= ["ap-southeast-1","eu-west-2","us-west-2","us-east-1"]
 // }
 stage ("Parallel Builds"){
     parallel (
-        "stream1" : {
-            node{
-                preparedOneStages("stage1-1")
-                preparedOneStages("stage1-2")
+        // "stream1" : {
+        //     node{
+        //         preparedOneStages("stage1-1")
+        //         preparedOneStages("stage1-2")
+        //     }
+        // },
+        // "stream2" : {
+        //     node{
+        //         preparedOneStages("stage2-1")
+        //         preparedOneStages("stage2-2")
+        //     }
+        // }
+
+        node {
+            stage("stage1"){
+                println "stage1"
             }
-        },
-        "stream2" : {
-            node{
-                preparedOneStages("stage2-1")
-                preparedOneStages("stage2-2")
+        }
+        node {
+            stage("stage2"){
+                println "stage2"
             }
         }
     )
