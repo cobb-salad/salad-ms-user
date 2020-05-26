@@ -147,7 +147,7 @@ stage ("Parallel Builds"){
                 preparedOneStages("stage1-1")
                 preparedOneStages("stage1-2")
             }
-        }
+        },
         "stream2" : {
             node{
                 preparedOneStages("stage2-1")
