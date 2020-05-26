@@ -132,7 +132,7 @@ def prepareOneParallel(String paName){
 }
 def preparedOneStages(String stageName){
     return{
-        stage(stageName){
+        stage("${stageName}"){
             node{
                 println "${stageName}"
             }
