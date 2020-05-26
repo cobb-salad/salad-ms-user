@@ -109,27 +109,33 @@ PROD_REGIONS= ["ap-southeast-1","eu-west-2","us-west-2","us-east-1"]
 stage ("Parallel Builds") {
     parallel (
         "stream1" : {
+            node{
             stage("stream1"){
                 echo "stream1"
             }
             stage("stream1-1"){
                 echo "stream1-1"
             }
+            }
         },
         "stream2" : {
+            node{
             stage("stream2") {
                 echo "stream2"
             }
             stage("stream2-1"){
                 echo "stream2-1"
             }
+            }
         },
         "stream3" : {
+            node{
             stage("stream3") {
                 echo "stream3"
             }
             stage("stream3-1"){
                 echo "stream3-1"
+            }
             }
         }
     )
