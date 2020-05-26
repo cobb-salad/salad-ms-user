@@ -168,25 +168,25 @@ PROD_REGIONS= ["ap-southeast-1","eu-west-2","us-west-2","us-east-1"]
 //     )
 // }
 
-
+buildStages = []
 stages = [:]
 
-for(int i=0;i<2;i++){
-    stages[i] = {
+buildStages.add(preparedOneStages("stage1"))
+buildStages.add(preparedOneStages("stage2"))
+
+stages.put("parallel1", prepareOneParallel("parallel"))
+stage("parrallel"){
+    node{
+        stages
+    }
+}
+def prepareOneParallel(String paName){
+    return {
         node{
-            stage("stage${i}"){
-                println "stage${i}"
-            }
+            buildStages
         }
     }
 }
-
-stage("Parallel stages"){
-    node{
-        parallel stages
-    }
-}
-
 def preparedOneStages(String stageName){
     return{
         stage(stageName){
