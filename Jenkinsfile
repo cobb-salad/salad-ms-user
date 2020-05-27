@@ -149,7 +149,7 @@ def prepareOneParallel(String paName){
 def preparedOneStages(String stageName){
     return{
         stage("${stageName}"){
-            when(!steps.contains("${stageName}")){
+            when(steps.contains("${stageName}") == false){
                 echo 'skip'
             }
             node{
