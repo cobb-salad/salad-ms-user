@@ -114,31 +114,31 @@ PROD_REGIONS= ["ap-southeast-1","eu-west-2","us-west-2","us-east-1"]
 //     }
 // }
 
-stream1 = [:]
-stream1.put("stage1-1",preparedOneStages("stage1-1"))
-stream1.put("stage1-2",preparedOneStages("stage1-2"))
-stream2 = [:]
-stream2.put("stage2-1",preparedOneStages("stage2-1"))
-stream2.put("stage2-2",preparedOneStages("stage2-2"))
+// stream1 = [:]
+// stream1.put("stage1-1",preparedOneStages("stage1-1"))
+// stream1.put("stage1-2",preparedOneStages("stage1-2"))
+// stream2 = [:]
+// stream2.put("stage2-1",preparedOneStages("stage2-1"))
+// stream2.put("stage2-2",preparedOneStages("stage2-2"))
+
 stage ("Parallel Builds"){
     parallel (
         "stream1" : {
             node{
-                // preparedOneStages("stage1-1").call()
-                // preparedOneStages("stage1-2").call()
-                stream1
+                preparedOneStages("stage1-1").call()
+                preparedOneStages("stage1-2").call()
             }
         },
         "stream2" : {
             node{
-                // preparedOneStages("stage2-1").call()
-                // preparedOneStages("stage2-2").call()
-                stream2
+                preparedOneStages("stage2-1").call()
+                preparedOneStages("stage2-2").call()
             }
         }
     )
 }
 
+steps = ["stage1-1,stages2-2"]
 def prepareOneParallel(String paName){
     return {
         node{
@@ -149,6 +149,9 @@ def prepareOneParallel(String paName){
 def preparedOneStages(String stageName){
     return{
         stage("${stageName}"){
+            when(!steps.contains("${stagesName}")){
+                echo 'skip'
+            }
             node{
                 println "${stageName}"
             }
