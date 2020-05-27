@@ -106,22 +106,30 @@ PROD_REGIONS= ["ap-southeast-1","eu-west-2","us-west-2","us-east-1"]
 
 // //     }
 // // }
-stage ("Parallel Builds"){
-    parallel (
-        "stream1" : {
-            node{
-                preparedOneStages("stage1-1").call()
-                preparedOneStages("stage1-2").call()
-            }
-        },
-        "stream2" : {
-            node{
-                preparedOneStages("stage2-1").call()
-                preparedOneStages("stage2-2").call()
-            }
-        }
-    )
+
+stage ("test") {
+
+    node{
+       preparedOneStages("stage1-1").call()
+       preparedOneStages("stage1-2").call()
+    }
 }
+// stage ("Parallel Builds"){
+//     parallel (
+//         "stream1" : {
+//             node{
+//                 preparedOneStages("stage1-1").call()
+//                 preparedOneStages("stage1-2").call()
+//             }
+//         },
+//         "stream2" : {
+//             node{
+//                 preparedOneStages("stage2-1").call()
+//                 preparedOneStages("stage2-2").call()
+//             }
+//         }
+//     )
+// }
 
 def prepareOneParallel(String paName){
     return {
