@@ -126,14 +126,14 @@ stage ("Parallel Builds"){
     parallel (
         "stream1" : {
             node{
-                preparedOneStages("stage1-1").call()
-                preparedOneStages("stage1-2").call()
+                preparedOneStages(selectedStages, "stage1-1").call()
+                preparedOneStages(selectedStages, "stage1-2").call()
             }
         },
         "stream2" : {
             node{
-                preparedOneStages("stage2-1").call()
-                preparedOneStages("stage2-2").call()
+                preparedOneStages(selectedStages, "stage2-1").call()
+                preparedOneStages(selectedStages, "stage2-2").call()
             }
         }
     )
@@ -146,7 +146,7 @@ def prepareOneParallel(String paName){
         }
     }
 }
-def preparedOneStages(String stageName){
+def preparedOneStages(selectedStages, String stageName){
     return{
         stage("${stageName}"){
             when(selectedStages.contains("${stageName}") == false){
