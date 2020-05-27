@@ -138,7 +138,7 @@ stage ("Parallel Builds"){
     )
 }
 
-steps = ["stage1-1,stages2-2"]
+steps = ["stage1-1","stages2-2"]
 def prepareOneParallel(String paName){
     return {
         node{
