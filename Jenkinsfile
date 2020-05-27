@@ -8,7 +8,7 @@ AMI_VERSION=0
 def runParallel = true
 def buildStages
 
-def steps = ["stage1-1","stages2-2"]
+def selectedStages = ["stage1-1","stages2-2"]
 QA_REGIONS= ["us-west-2","us-east-1"]
 PROD_REGIONS= ["ap-southeast-1","eu-west-2","us-west-2","us-east-1"]
 
@@ -149,7 +149,7 @@ def prepareOneParallel(String paName){
 def preparedOneStages(String stageName){
     return{
         stage("${stageName}"){
-            when(steps.contains("${stageName}") == false){
+            when(selectedStages.contains("${stageName}") == false){
                 echo 'skip'
             }
             node{
