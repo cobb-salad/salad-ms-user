@@ -11,7 +11,6 @@ def buildStages
 QA_REGIONS= ["us-west-2","us-east-1"]
 PROD_REGIONS= ["ap-southeast-1","eu-west-2","us-west-2","us-east-1"]
 
-
 // stage('Parameter Check'){
 //     node{
 //         TAG = "${params.TAG}"
@@ -114,18 +113,27 @@ PROD_REGIONS= ["ap-southeast-1","eu-west-2","us-west-2","us-east-1"]
 //        preparedOneStages("stage1-2").call()
 //     }
 // }
+
+stream1 = []
+stream1.add(preparedOneStages("stage1-1"))
+stream1.add(preparedOneStages("stage1-2"))
+stream2 = []
+stream2.add(preparedOneStages("stage2-1"))
+stream2.add(preparedOneStages("stage2-2"))
 stage ("Parallel Builds"){
     parallel (
         "stream1" : {
             node{
-                preparedOneStages("stage1-1").call()
-                preparedOneStages("stage1-2").call()
+                // preparedOneStages("stage1-1").call()
+                // preparedOneStages("stage1-2").call()
+                stream1
             }
         },
         "stream2" : {
             node{
-                preparedOneStages("stage2-1").call()
-                preparedOneStages("stage2-2").call()
+                // preparedOneStages("stage2-1").call()
+                // preparedOneStages("stage2-2").call()
+                stream2
             }
         }
     )
@@ -147,28 +155,6 @@ def preparedOneStages(String stageName){
         }
     }
 }
-// parallel worker_1: {
-//     stage("worker_1"){
-//         node(){
-//             sh """hostname ; pwd """
-//             print "on worker_1"
-//         }
-//     }
-// },  worker_2: {
-//     stage("worker_2"){
-//         node(){
-//             sh """hostname ; pwd """
-//             print "on worker_2"
-//         }
-//     }
-// },  worker_3: {
-//     stage("worker_3"){
-//         node(){
-//             sh """hostname ; pwd """
-//             print "on worker_3"
-//         }
-//     }
-// }
 
 // stage("Build AMI") {
 //     // input(message: "AMI exist!!, Want to auto increment AMI version?") 
