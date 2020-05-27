@@ -126,14 +126,14 @@ stage ("Parallel Builds"){
             node{
                 // preparedOneStages("stage1-1").call()
                 // preparedOneStages("stage1-2").call()
-                stream1
+                stream1.call()
             }
         },
         "stream2" : {
             node{
                 // preparedOneStages("stage2-1").call()
                 // preparedOneStages("stage2-2").call()
-                stream2
+                stream2.call()
             }
         }
     )
