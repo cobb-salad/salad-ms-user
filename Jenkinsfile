@@ -8,6 +8,7 @@ AMI_VERSION=0
 def runParallel = true
 def buildStages
 
+def steps = ["stage1-1","stages2-2"]
 QA_REGIONS= ["us-west-2","us-east-1"]
 PROD_REGIONS= ["ap-southeast-1","eu-west-2","us-west-2","us-east-1"]
 
@@ -138,7 +139,6 @@ stage ("Parallel Builds"){
     )
 }
 
-steps = ["stage1-1","stages2-2"]
 def prepareOneParallel(String paName){
     return {
         node{
