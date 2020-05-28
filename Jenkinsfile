@@ -122,23 +122,23 @@ PROD_REGIONS= ["ap-southeast-1","eu-west-2","us-west-2","us-east-1"]
 // stream2.put("stage2-1",preparedOneStages("stage2-1"))
 // stream2.put("stage2-2",preparedOneStages("stage2-2"))
 
-stage ("Parallel Builds"){
-    parallel (
-        "stream1" : {
-            node{
-                preparedOneStages(selectedStages, "stage1-1").call()
-                preparedOneStages(selectedStages, "stage1-2").call()
-            }
-        },
-        "stream2" : {
-            node{
-                preparedOneStages(selectedStages, "stage2-1").call()
-                preparedOneStages(selectedStages, "stage2-2").call()
-            }
-        }
-    )
-}
-
+// stage ("Parallel Builds"){
+//     parallel (
+//         "stream1" : {
+//             node{
+//                 preparedOneStages(selectedStages, "stage1-1").call()
+//                 preparedOneStages(selectedStages, "stage1-2").call()
+//             }
+//         },
+//         "stream2" : {
+//             node{
+//                 preparedOneStages(selectedStages, "stage2-1").call()
+//                 preparedOneStages(selectedStages, "stage2-2").call()
+//             }
+//         }
+//     )
+// }
+envTest = ["test1=test1", "test2=test2","test3=test3"]
 def prepareOneParallel(String paName){
     return {
         node{
@@ -156,6 +156,20 @@ def preparedOneStages(selectedStages, String stageName){
                 println "${stageName}"
             }
         }
+    }
+}
+
+stage("stage1"){
+    node{
+
+        withEnv(envTest){
+            sh '''
+                echo $test1
+                echo $test2
+                echo $test3
+            '''
+        }
+
     }
 }
 
