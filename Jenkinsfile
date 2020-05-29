@@ -147,7 +147,7 @@ stage1.put("stage1", preparedOneStages("stage1"))
 stage2.put("stage2", preparedOneStages("stage2"))
 
 parallels.put("para1", stage1)
-parallels.put("para2", stage2)
+// parallels.put("para2", stage2)
 
 
 stage("ttt"){
