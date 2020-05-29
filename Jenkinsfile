@@ -139,6 +139,22 @@ PROD_REGIONS= ["ap-southeast-1","eu-west-2","us-west-2","us-east-1"]
 //     )
 // }
 envTest = ["test1=test1", "test2=test2","test3=test3"]
+stage1 = [:]
+stage2 = [:]
+parallels = [:]
+
+stage1.put("stage1", preparedOneStages(selectedStages,"stage1"))
+stage2.put("stage2", preparedOneStages(selectedStages,"stage2"))
+
+parallels.put("para1", stage1)
+parallels.put("para2", stage2)
+
+
+stage("ttt"){
+    parallel (
+        parallels
+    )
+}
 def prepareOneParallel(String paName){
     return {
         node{
