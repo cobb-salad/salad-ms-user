@@ -144,9 +144,9 @@ envTest = ["test1=test1", "test2=test2","test3=test3"]
 def buildStage = {
     String stageName -> 
 
-    stage("$stageName"){
+    stage("${stageName}"){
         node{
-            println $stageName
+            println "${stageName}"
         }
     }
 }
