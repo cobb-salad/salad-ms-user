@@ -140,6 +140,17 @@ PROD_REGIONS= ["ap-southeast-1","eu-west-2","us-west-2","us-east-1"]
 // }
 envTest = ["test1=test1", "test2=test2","test3=test3"]
 
+
+def buildStage {
+    String stageName -> 
+
+    stage("$stageName"){
+        node{
+            println $stageName
+        }
+    }
+}
+
 def prepareOneParallel(String paName){
     return {
         node{
@@ -158,22 +169,23 @@ def preparedOneStages(String stageName){
     }
 }
 
-stage("stage1"){
-    node{
+buildStage()
 
-        println "${envTest}"
-        envTest.add("test4=test4")
-        withEnv(envTest){
-            sh '''
-                echo $test1
-                echo $test2
-                echo $test3
-                echo $test4
-            '''
-        }
+// stage("stage1"){
+//     node{
 
-    }
-}
+//         println "${envTest}"
+//         envTest.add("test4=test4")
+//         withEnv(envTest){
+//             sh '''
+//                 echo $test1
+//                 echo $test2
+//                 echo $test3
+//                 echo $test4
+//             '''
+//         }
+//     }
+// }
 
 // stage("Build AMI") {
 //     // input(message: "AMI exist!!, Want to auto increment AMI version?") 
