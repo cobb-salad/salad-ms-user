@@ -139,24 +139,7 @@ PROD_REGIONS= ["ap-southeast-1","eu-west-2","us-west-2","us-east-1"]
 //     )
 // }
 envTest = ["test1=test1", "test2=test2","test3=test3"]
-stage1 = [:]
-stage2 = [:]
-parallels = [:]
 
-stage1.put("stage1", preparedOneStages("stage1"))
-stage2.put("stage2", preparedOneStages("stage2"))
-
-parallels.put("para1", stage1)
-// parallels.put("para2", stage2)
-
-
-stage("ttt"){
-    parallel (
-        node{
-        parallels
-        }
-    )
-}
 def prepareOneParallel(String paName){
     return {
         node{
@@ -168,6 +151,7 @@ def preparedOneStages(String stageName){
     return{
         stage("${stageName}"){
             node{
+                println "${envTest}"
                 println "${stageName}"
             }
         }
@@ -177,11 +161,14 @@ def preparedOneStages(String stageName){
 stage("stage1"){
     node{
 
+        println "${envTest}"
+        envTest.add("test4=test4")
         withEnv(envTest){
             sh '''
                 echo $test1
                 echo $test2
                 echo $test3
+                echo $test4
             '''
         }
 
