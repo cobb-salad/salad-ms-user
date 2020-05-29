@@ -152,7 +152,9 @@ parallels.put("para1", stage1)
 
 stage("ttt"){
     parallel (
+        node{
         parallels
+        }
     )
 }
 def prepareOneParallel(String paName){
