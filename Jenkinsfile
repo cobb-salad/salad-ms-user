@@ -143,8 +143,8 @@ stage1 = [:]
 stage2 = [:]
 parallels = [:]
 
-stage1.put("stage1", preparedOneStages(selectedStages,"stage1"))
-stage2.put("stage2", preparedOneStages(selectedStages,"stage2"))
+stage1.put("stage1", preparedOneStages("stage1"))
+stage2.put("stage2", preparedOneStages("stage2"))
 
 parallels.put("para1", stage1)
 parallels.put("para2", stage2)
@@ -162,12 +162,9 @@ def prepareOneParallel(String paName){
         }
     }
 }
-def preparedOneStages(selectedStages, String stageName){
+def preparedOneStages(String stageName){
     return{
         stage("${stageName}"){
-            when(selectedStages.contains("${stageName}") == false){
-                echo 'skip'
-            }
             node{
                 println "${stageName}"
             }
