@@ -169,7 +169,7 @@ def preparedOneStages(String stageName){
     }
 }
 
-"stage1".(buildStage)
+buildStage('stage1')
 
 // stage("stage1"){
 //     node{
