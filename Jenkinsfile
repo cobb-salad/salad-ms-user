@@ -141,7 +141,7 @@ PROD_REGIONS= ["ap-southeast-1","eu-west-2","us-west-2","us-east-1"]
 envTest = ["test1=test1", "test2=test2","test3=test3"]
 
 
-def buildStage {
+def buildStage = {
     String stageName -> 
 
     stage("$stageName"){
@@ -169,7 +169,7 @@ def preparedOneStages(String stageName){
     }
 }
 
-buildStage()
+"stage1".(buildStage)
 
 // stage("stage1"){
 //     node{
