@@ -146,6 +146,11 @@ def buildStage = {
 
     stage("${stageName}"){
         node{
+            def autoinc = input(message: "AMI exist!!, Want to auto increment AMI version?", ok: 'Yes', 
+                        parameters: [booleanParam(defaultValue: true, 
+                        description: 'auto increment ami version',name: 'Yes?')])
+
+            println "${autoinc}"
             println "${stageName}"
         }
     }
