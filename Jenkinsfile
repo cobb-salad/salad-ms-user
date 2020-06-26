@@ -1,384 +1,365 @@
-AMI_VERSION = 0
-BUILD_TYPE="SBT"
+SERVICE="user"
 SCALA_VERSION="2.12"
 ASSEMBLY="-assembly"
-SERIVCE="user"
+
 AMI_VERSION=0
-
-def runParallel = true
-def buildStages
-
-def selectedStages = ["stage1-1","stages2-2"]
+STAGES = "build_artifacts,build_ami,deploy_to_QA"
 QA_REGIONS= ["us-west-2","us-east-1"]
 PROD_REGIONS= ["ap-southeast-1","eu-west-2","us-west-2","us-east-1"]
+common_envs = [ "API=${SERVICE}", "ASSEMBLY=${ASSEMBLY}" ]
 
-// stage('Parameter Check'){
-//     node{
-//         TAG = "${params.TAG}"
-//         AUTO_INCREMENT_AMI_VERSION = "${params.AUTO_INCREMENT_AMI_VERSION}"
-//         RUN_TASK = "${params.RUN_TASK}"
+buildAMIInfo = [:]
 
-//         try{
-//             if (params.SERVICE == "") {
-//                 throw new Exception("You must select Service")
-//             }
-//             if (params.TAG == "") {
-//                 throw new Exception("Enter the artifact version for the build in TAG")
-//             }
-//         }catch(e){
-//             currentBuild.result = "FAILURE"
-//     //             throw(e)
-//             println(e)
-//         }
-//     }
-// }
+stage('Parameter Check'){
+    node{
+        TAG = "${params.TAG}"
 
-// stage("Git CheckOut"){
-//     node{
-//         println "Git CheckOut Started"
-//         checkout(
-//                 [
-//                         $class                           : 'GitSCM',
-//                         branches                         : [[name: 'master']],
-//                         doGenerateSubmoduleConfigurations: false,
-//                         extensions                       : [],
-//                         submoduleCfg                     : [],
-//                         userRemoteConfigs                : [[credentialsId: 'github_mjkong_ssh', url: 'https://github.com/cobb-salad/salad-ms-user.git']]
-//                 ]
-//         )
-//         println "Git CheckOut End"
+        try{
+            if (TAG == "") {
+                throw new Exception("Enter the artifact version for the build in TAG")
+            }
 
-//         withEnv([
-//             "testenv=${SCALA_VERSION}"
-//         ]){
-//             sh '''
-//                 echo $testenv
+            if(TAG.contains("RC") || TAG.contains("SNAPSHOT")){
 
-//             '''
-//         }
-//     }
-// }
-
-// stage("parallel test"){
-//     node{
-//     parallel(
-//         "test" : {
-//             oneStep("qa","us-east-1")
-//         }
-//     )
-//     }
-// }
-
-// def oneStep(envToBuild, regionToBuild){
-//     return {
-//         stage("Build AMI: ${envToBuild}-${regionToBuild}"){
-//             input(message: "Want to build AMI?")
-//             node{
-
-//                 println "${envToBuild}"
-//                 println "${regionToBuild}"
-                    
-//             }
-//         }
-//     }
-// }
-
-// // stage("Build Artifact") {
-// //     input(message: "Want to build artifact?") 
-// //     node{
-// //         if (params.BUILD_TYPE == "SBT"){
-
-// //             BUILD_DIR="target/scala-${SCALA_VERSION}"
-// //             SBT_LAUNCHER="1.5"
-// //             JVM_OPTION="-Djavax.net.ssl.trustStore=/etc/pki/ca-trust/extracted/java/cacerts"
-// //             SBT_OPTION="-Dsbt.log.noformat=true"
-// //             SBT_ACTION="clean assembly"
-
-// //             sh "ls -la"
-// //         }else{
-// //             BUILD_DIR="build/libs"
-// //             GRADLE_TASK="clean install"
-// //         }
-
-// //         ami_version = 1
-// //         println "${AMI_VERSION}"
-// //         println "${ami_version}"
-
-// //     }
-// // }
-
-// stage ("test") {
-
-//     node{
-//        preparedOneStages("stage1-1").call()
-//        preparedOneStages("stage1-2").call()
-//     }
-// }
-
-// stream1 = [:]
-// stream1.put("stage1-1",preparedOneStages("stage1-1"))
-// stream1.put("stage1-2",preparedOneStages("stage1-2"))
-// stream2 = [:]
-// stream2.put("stage2-1",preparedOneStages("stage2-1"))
-// stream2.put("stage2-2",preparedOneStages("stage2-2"))
-
-// stage ("Parallel Builds"){
-//     parallel (
-//         "stream1" : {
-//             node{
-//                 preparedOneStages(selectedStages, "stage1-1").call()
-//                 preparedOneStages(selectedStages, "stage1-2").call()
-//             }
-//         },
-//         "stream2" : {
-//             node{
-//                 preparedOneStages(selectedStages, "stage2-1").call()
-//                 preparedOneStages(selectedStages, "stage2-2").call()
-//             }
-//         }
-//     )
-// }
-envTest = ["test1=test1", "test2=test2","test3=test3"]
-
-
-def buildStage = {
-    String stageName -> 
-
-    stage("${stageName}"){
-        node{
-            def autoinc = input(message: "AMI exist!!, Want to auto increment AMI version?", ok: 'Yes', 
-                        parameters: [booleanParam(defaultValue: true, 
-                        description: 'auto increment ami version',name: 'Yes?')])
-
-            println "${autoinc}"
-            println "${stageName}"
+            }else if(TAG.contains("RELEASE")){
+                STAGES = STAGE + ",build_ami_prod,deploy_to_PROD"
+            }else{
+                throw new Exception("The TAG must include one of name \"RC\", \"SNAPSHOT\", \"RELEASE\" to deploy QA or PROD")
+            }
+        }catch(e){
+            currentBuild.result = "FAILURE"
+    //             throw(e)
+            println(e)
+        }finally{
+            common_envs.add("APP_VERSION=${TAG}")
         }
     }
 }
 
-def prepareOneParallel(String paName){
-    return {
-        node{
-            buildStages
-        }
-    }
-}
-def preparedOneStages(String stageName){
-    return{
-        stage("${stageName}"){
+stage("Build and deploy AMI to QA"){
+    // input(message: "Want to deploy AMI to QA?") 
+    def selectedRegion = input(message: "Select region to deploy AMI", parameters: [
+         extendedChoice(
+            defaultValue: 'us-east-1,us-west-2',
+            description: '',
+            multiSelectDelimiter: ',',
+            name: 'selectedRegion',
+            quoteValue: false,
+            saveJSONParameterToFile: false,
+            type: 'PT_CHECKBOX',
+            value:'us-east-1,us-west-2',
+            visibleItemCount: 2
+        )
+    ])
+
+    parallel (
+        "QA-useast-1" : {
             node{
-                println "${envTest}"
-                println "${stageName}"
+                stage("qa-us-east-1_build_ami"){
+                    if(selectedRegion.contains("us-east-1")){
+                        input(message: "Want to build AMI for QA us-east-1?")
+                        node{
+                            println "QA-us-east-1_build_ami"
+                        }
+                    }
+                }
+                stage("qa-us-east-1_deploy_ami") {
+                    if(selectedRegion.contains("us-east-1")){
+                        input(message: "Want to deploy AMI to QA us-east-1?")
+                        node{
+                            println "QA-us-east-1_deploy_ami"
+                        }
+                    }
+                }
+            }
+        },
+        "QA-uswest-2" : {
+            stage("qa-us-west-2_build_ami"){
+                if(selectedRegion.contains("us-west-2")){
+                    input(message: "Want to build AMI for QA us-west-2?")
+                    node{
+                        println "QA-us-west-2_build_ami"
+                    }
+                }
+            }
+            stage("qa-us-west-2_deploy_ami") {
+                if(selectedRegion.contains("us-west-2")){
+                    input(message: "Want to deploy AMI to QA us-west-2?")
+                    node{
+                        println "QA-us-west-2_deploy_ami"
+                    }
+                }
             }
         }
+    )
+}
+
+def apply_terraform(envList){
+
+    withEnv(envList){
+        sh '''#!/bin/bash
+            set -x
+            source $SCRIPTS_BASE/jenkins/assume_role.sh platform $envToDeploy-$regionToDeploy
+            . /bin/virtualenvwrapper.sh
+            workon platform
+
+            touch changeAMI.sh
+            chmod +x changeAMI.sh
+            echo "#!/bin/bash" > changeAMI.sh
+            echo "cd $TERRAFORM_HOME/scripts" >> changeAMI.sh
+            echo "/bin/git pull" >> changeAMI.sh
+            echo "sed -i \'s/\\bami-[^\\"]*/$AMI_ID/g\' $TERRAFORM_HOME/terraform/$envToDeploy/$regionToDeploy/_frontend_apps/$API/service/variables.tf" >> changeAMI.sh
+            echo "sed -i \'s/\\bsun-ms-$API-[^\\"]*/sun-ms-$API-$APP_VERSION-$LT_NAME/g\' $TERRAFORM_HOME/terraform/$envToDeploy/$regionToDeploy/_frontend_apps/$API/service/variables.tf" >> changeAMI.sh
+
+            ./changeAMI.sh
+
+            rm -f changeAMI.sh
+            cd $TERRAFORM_HOME/scripts
+
+            ./terraform-runner.sh "terraform.plan(/$envToDeploy/$regionToDeploy/_frontend_apps/$API/service/)"
+
+            sleep 20
+
+            ./terraform-runner.sh "terraform.apply(/$envToDeploy/$regionToDeploy/_frontend_apps/$API/service/)"
+
+            /bin/git add ../terraform/$envToDeploy/$regionToDeploy/_frontend_apps/$API/service/.log
+            /bin/git add ../terraform/$envToDeploy/$regionToDeploy/_frontend_apps/$API/service/variables.tf
+
+            /bin/git commit -m "updating $API to version $APP_VERSION"
+
+            git push
+        '''
+
+    }
+    
+}
+
+def apply_chef(envList, env, region) {
+
+    CHEF_ENVIRONMENT = "${env}-${region}-${SERVICE}"
+    regex="^[qa|prod].*[1-2]\$"
+    if((CHEF_ENVIRONMENT =~ regex).matches()){
+        ATTRIBUTE="[\"platform-microservice\"][\"${SERVICE}\"][\"artifact\"][\"version\"]"
+    }else{
+        ATTRIBUTE="[\"b2c-microservice\"][\"${SERVICE}\"][\"artifact\"][\"version\"]"
+    }
+
+    envList.add("ATTRIBUTE=${ATTRIBUTE}")
+    withEnv(envList){
+        sh '''#!/bin/bash
+            set -x 
+            source $SCRIPTS_BASE/jenkins/assume_role.sh platform $envToDeploy-$regionToDeploy
+            eval "$(chef shell-init bash)"
+            . /bin/virtualenvwrapper.sh
+            workon platform
+
+            $SCRIPTS_BASE/disable_chef.py -i ~/.ssh/id_rsa -e $CHEF_ENVIRONMENT -r $regionToDeploy -o sun-ms-$API -u ops-user -p --proxy ops-user@$BASTION
+
+            # Update chef environment
+            KNIFE_HOME=/var/lib/jenkins/.platform-chef
+            ROLE=sun-ms-$API
+            $SCRIPTS_BASE/chef/migrate_chef_environment -q ".default_attributes$ATTRIBUTE == \"$APP_VERSION\"" -k $KNIFE_HOME/knife.rb sun-ms-$API $CHEF_ENVIRONMENT sun-ms-${API}_VERSION="$APP_VERSION"
+
+            RETVAL=$?
+            (( ok = RETVAL & 1 ))
+            (( changes = (RETVAL & 2) >> 1 ))
+            GOOD=0
+            YES=1
+
+            set +x
+        '''
     }
 }
 
-buildStage('stage1')
+def queryASGInfo(envList){
 
-// stage("stage1"){
-//     node{
+    envList.add("ASG=sun-ms-${SERVICE}-asg")
+    envList.add("autoscalingInfo=autoscalingInfo.out")
+    // env.ASG="sun-ms-${API}-asg"
+    // env.autoscalingInfo = "autoscalingInfo.out"
 
-//         println "${envTest}"
-//         envTest.add("test4=test4")
-//         withEnv(envTest){
-//             sh '''
-//                 echo $test1
-//                 echo $test2
-//                 echo $test3
-//                 echo $test4
-//             '''
-//         }
-//     }
-// }
+    withEnv(envList){
+        sh '''#!/bin/bash
+            set -x
+            source $SCRIPTS_BASE/jenkins/assume_role.sh platform $envToDeploy-$regionToDeploy
+            . /bin/virtualenvwrapper.sh
+            workon platform
 
-// stage("Build AMI") {
-//     // input(message: "AMI exist!!, Want to auto increment AMI version?") 
-//     // DEPLOY_SERVERS = input message: '', parametrs: [[$class: 'ChoiceParameterDefinition', choices:'SERVER1,SERVER2\nSERVER1\nSERVER2', description: '', name: 'DEPLOY_SERVERS']]
-//     def deploy_region = input(message: "choice", parameters: [
+            aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name $ASG | jq -r '.AutoScalingGroups[]' > $autoscalingInfo 
 
-//          extendedChoice(
-//             defaultValue: 'ap-southeast-1,eu-west-2,us-west-2,us-east-1',
-//             description: 'Some description',
-//             multiSelectDelimiter: ',',
-//             name: 'deploy_region',
-//             quoteValue: false,
-//             saveJSONParameterToFile: false,
-//             type: 'PT_CHECKBOX',
-//             value:'ap-southeast-1,eu-west-2,us-west-2,us-east-1',
-//             visibleItemCount: 4
-//         )
-//     ])
-//     node{
-        
-//         println "${deploy_region}"
-//         if(AMI_VERSION > 0){
-//             println "AMI_VERSION is greater than 0"
-//         }
+            jq '. | .MinSize,.MaxSize,.MixedInstancesPolicy.InstancesDistribution.OnDemandBaseCapacity,.MixedInstancesPolicy.InstancesDistribution.OnDemandBaseCapacity' $autoscalingInfo > asginfo.out
+            set +x
+        '''
+    }
 
-//         VV=10
+    ASGINFO = readFile('asginfo.out')
+    return ASGINFO
+}
 
-//         withEnv([
-//             "AMI_VERSION=${VV}",
-//             "AMI=test/version-${VV}"
-//         ]){
-//             sh '''
-//                 echo $AMI_VERSION
-//                 echo $AMI
-//             '''
+def rolling_upgrade(envList){
 
+    def launchInstance = "launchConfiguration"
+    def OPTIONARGS = ""
+    def MINSIZE = 0
+    def MAXSIZE = 0
+    def ONDEMANDCAPACITY = 0
+    def ONDEMANDRATIO = 0
+    def CALCULATEDMINSIZE = 0
+    def CALCULATEDMAXSIZE = 0
+    def CALCULATEDONDEMANDRATIO = 0
 
-//             sh '''
-//                 echo $AMI_VERSION
-//                 echo $AMI
-//             '''
-//         }
+    ASGINFO = queryASGInfo(envList)
+    def list = ASGINFO.readLines()
 
+    println list.size()
 
-//         sh '''
-//             echo $AMI_VERION
-//         '''
+    MINSIZE = list[0].trim().toInteger()
+    MAXSIZE = list[1].trim().toInteger()
+    if(list[2] == "null"){
+        launchInstance = "launchTemplate"
+    }else{
+        ONDEMANDCAPACITY = list[2].trim().toInteger()
+        ONDEMANDRATIO = list[3].trim().toInteger()
+    }
+    
+    CALCULATEDMINSIZE = MINSIZE * 2
+    CALCULATEDMAXSIZE = MAXSIZE
+    CALCULATEDONDEMANDRATIO = 0
 
-//     //         userInput = input(
-//     //             id: 'Proceed1', message: 'AMI_VERSION is ${env.AMI_VERSION} : Do you want to use this version?', parameters: [
-//     //             [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this']
-//     //          ])
-//     //
-//     //         println "${userInput}"
-//     }
-// }
+    if (launchInstance == "launchTemplate" && ONDEMANDCAPACITY != 0){
+        CALCULATEDMINSIZE = ((int)((MINSIZE * 2) * ((ONDEMANDCAPACITY/MINSIZE) + 1) + 1) * 100)/100
+        CALCULATEDONDEMANDRATIO = (int)((ONDEMANDCAPACITY/MINSIZE) *100)
+        OPTIONARGS = " --max-size \$CALCULATEDMAXSIZE --mixed-instances-policy \'{\"InstancesDistribution\":{\"OnDemandPercentageAboveBaseCapacity\":\$CALCULATEDONDEMANDRATIO}}\'"
+    }
 
-// stage("after build ami"){
-//     node{
-//         env.TESTVAL2="ttt"
-//         env.AMI_ID="ami-123456789"
-//         env.ENVIRONMENT="qa"
-//         ENVIRON = "${env.ENVIRONMENT}"
+    if(CALCULATEDMINSIZE > MAXSIZE){
+        CALCULATEDMAXSIZE = CALCULATEDMINSIZE + MAXSIZE
+    }
 
-//         sh """#!/bin/bash
-//             set -x
-//             touch test2
-//             echo '\"ami-test\"' > test2
+    println "${MAXSIZE} - ${MINSIZE} - ${ONDEMANDCAPACITY} - ${ONDEMANDRATIO} - ${CALCULATEDONDEMANDRATIO}"
 
-//             touch change.sh
-//             chmod +x change.sh
-//             ls -al
+    println "before update asg"
 
-//             echo "#!/bin/bash" > change.sh
-//             cat change.sh
-//             #echo "sed -i \'s/ami-[^\"]*/ami-123456789/g\' test2" >> change.sh
-//             echo "sed -i \'s/\\bami-[^\\"]*/$AMI_ID/g\' test2" >> change.sh
-//             #sed -i 's/[^\"]*/'"$TESTVAL2"'/g' test2
-//             ./change.sh
-//             set +x
-//         """
-//         test()
-//     }
-// }
+    envList.add("CALCULATEDMINSIZE=${CALCULATEDMINSIZE}")
+    envList.add("CALCULATEDMAXSIZE=${CALCULATEDMAXSIZE}")
+    envList.add("CALCULATEDONDEMANDRATIO=${CALCULATEDONDEMANDRATIO}")
+    envList.add("OPTIONARGS=${OPTIONARGS}")
+    envList.add("MIN=${MINSIZE}")
 
-// // Create List of build stages to suit
-// def prepareBuildStages() {
-//   def buildStagesList = []
+    withEnv(envList){
+        sh '''#!/bin/bash
+            set -x
+            source $SCRIPTS_BASE/jenkins/assume_role.sh platform $envToDeploy-$regionToDeploy
+            . /bin/virtualenvwrapper.sh
+            workon platform
 
-//   for (i=1; i<5; i++) {
-//     def buildParallelMap = [:]
-//     for (name in [ 'one', 'two'] ) {
-//       def n = "${name} ${i}"
-//       buildParallelMap.put(n, prepareOneBuildStage(n))
-//     }
-//     buildStagesList.add(buildParallelMap)
-//   }
-//   return buildStagesList
-// }
+            echo Updating Autoscaling Group $ASG
+            aws autoscaling update-auto-scaling-group --auto-scaling-group-name $ASG --min-size $CALCULATEDMINSIZE --desired-capacity $CALCULATEDMINSIZE $OPTIONARGS
 
-// def prepareOneBuildStage(String name) {
-//   return {
-//     stage("Build stage:${name}") {
-//         node{
-//             println("Building ${name}")
-//         }
-//     }
-//   }
-// }
+            echo Waiting for Autoscaling Group to spin up new nodes
 
-// def getASGINFO(jsonString){
+            while [[ $SPINUPPENDING != "0" ]]; do
+                ASGINSERVICE=`aws autoscaling describe-auto-scaling-groups --auto-scaling-group-name $ASG | jq -r '.AutoScalingGroups[].Instances[].InstanceId' | wc -l | tr -d ' '`
+                SPINUPPENDING=$(($CALCULATEDMINSIZE - $ASGINSERVICE))
+                echo waiting on $SPINUPPENDING nodes to be created.
+                sleep 20
+            done
 
-//     env.ASGINFO = "/var/lib/jenkins/jsontmp"
+            echo Waiting for nodes to become healthy in Autoscaling Group
 
-//     sh '''#!/bin/bash
-//         jq '. | .MinSize,.MaxSize,.MixedInstancesPolicy.InstancesDistribution.OnDemandBaseCapacity,.MixedInstancesPolicy.InstancesDistribution.OnDemandBaseCapacity' /var/lib/jenkins/jsontmp > asginfo.out
-//     '''
+            while [[ $ASGPENDING != "0" ]]; do
+                ASGTOTALNODES=`aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names $ASG | jq -r '.AutoScalingGroups[].Instances[].HealthStatus' | wc -l | tr -d ' '`
+                ASGHEALTHY=`aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names $ASG | jq -r '.AutoScalingGroups[].Instances[].HealthStatus' | grep Healthy | wc -l | tr -d ' '`
+                ASGPENDING=$(($ASGTOTALNODES - $ASGHEALTHY))
+                echo $ASGPENDING not in service
+                sleep 10
+            done
 
-//     ASGOUT = readFile("asginfo.out")
-//     def list = ASGOUT.readLines()
+            ### Adding a sleep for a minute ###
+            echo "sleeping for one minutes"
+            sleep 60
 
-//     return ASGOUT
-// }
+            ### Wait for nodes to become healthly in the ELB
+            echo waiting for nodes to become healthy in the ELB
+            ELB=sun-ms-$API-$envToDeploy-lb
 
-// def jsontest(){
+            while [[ $PENDING != "0" ]]; do
+                INSERVICE=`aws elb describe-instance-health --load-balancer-name $ELB  | jq -r '.InstanceStates[].State'  | grep InService | wc -l | tr -d ' '`
+                PENDING=$(( $CALCULATEDMINSIZE - $INSERVICE))
+                echo $PENDING not in service
+                sleep 30
+            done
 
-//     env.ASGINFO = "/var/lib/jenkins/jsontmp"
-//     ASGINFO=readFile("/var/lib/jenkins/jsontmp")
-// //     def object= new JsonSlurper().parseText(ASGINFO)
-//     def ASGINFOObj = jsonSlurper.parseText(ASGINFO)
+            echo "sleeping for one more minutes to allow for any slow chef runs"
+            sleep 60
 
-//     MINSIZE = ASGINFOObj.get('MinSize')
-//     MAXSIZE = ASGINFOObj.get('MaxSize')
-//     ONDEMANDCAPACITY = ASGINFOObj.get('MixedInstancesPolicy').get('InstancesDistribution').get('OnDemandBaseCapacity')
-//     ONDEMANDRATIO = ASGINFOObj.get('MixedInstancesPolicy').get('InstancesDistribution').get('OnDemandPercentageAboveBaseCapacity')
+            ### Scale down
 
-// //     MINSIZE = ASGINFOObj.MinSize
-// //     MAXSIZE = ASGINFOObj.MaxSize
-// //     ONDEMANDCAPACITY = ASGINFOObj.MixedInstancesPolicy.InstancesDistribution.OnDemandBaseCapacity
-// //     ONDEMANDRATIO = ASGINFOObj.MixedInstancesPolicy.InstancesDistribution.OnDemandPercentageAboveBaseCapacity
+            echo Scaling down the Autoscaling Group $ASG
+            aws autoscaling update-auto-scaling-group --auto-scaling-group-name $ASG --min-size $MIN --desired-capacity $MIN
 
-//     ONDEMANDCAPACITY = 3
-//     ONDEMANDRATIO = 0
-//     OPTIONARGS = ""
+            while [[ $ELBPENDING != $MIN ]]; do
+                ELBPENDING=`aws elb describe-instance-health --load-balancer-name $ELB  | jq -r '.InstanceStates[].State'  | grep InService | wc -l | tr -d ' '`
+                echo $ELBPENDING node in service, scaling down to $MIN
+                sleep 20
+            done
+            set +x
+        '''
+    }
+}
 
-//     CALCULATEDMINSIZE = (MINSIZE * 2) * ((ONDEMANDCAPACITY / MINSIZE) + 1) + 1
-//     CALCULATEDMINSIZE = ((int) CALCULATEDMINSIZE * 100)/100
-//     CALCULATEDONDEMANDRATIO = (int)((ONDEMANDCAPACITY/MINSIZE) *100)
+def find_AMI_VERSION(envToBuildAMI, regionToBuildAMI){
 
-//     env.CALCULATEDONDEMANDRATIO = "${CALCULATEDONDEMANDRATIO}"
+    version=0
+    exist = true
 
-//     println "${CALCULATEDONDEMANDRATIO}"
+    while(exist){
+        APPLICATION_ARTIFACT= "sun-ms-${SERVICE}-${TAG}-${version}"
+        exist = check_exist_AMI(APPLICATION_ARTIFACT, envToBuildAMI, regionToBuildAMI)
 
-//     env.OPTIONARGS = "${OPTIONARGS}"
+        if(exist){
+            version++
+        }
+    }
 
+    return version
+}
 
-//     sh '''#!/bin/bash
-//         set -x
+def check_exist_AMI(String APPLICATION_ARTIFACT_NAME, String envToBuildAMI, String regionToBuildAMI) {
 
-//         echo test $CALCULATEDONDEMANDRATIO
+    exist = false
 
-//         echo $CALCULATEDONDEMANDRATIO
-//         echo $OPTIONARGS
+    withEnv([
+        "existAMIOutputFile=${envToBuildAMI}_${regionToBuildAMI}_AMI.out",
+        "APPLICATION_ARTIFACT=${APPLICATION_ARTIFACT_NAME}",
+        "envToBuildAMI=${envToBuildAMI}",
+        "regionToBuildAMI=${regionToBuildAMI}",
+        "AWS_DEFAULT_REGION=${regionToBuildAMI}",
+        "AWS_REGION=${regionToBuildAMI}"
+    ]){
+        sh '''#!/bin/bash
+            source $SCRIPTS_BASE/jenkins/assume_role.sh platform $envToBuildAMI-$regionToBuildAMI
+            aws ec2 describe-images --filter Name=tag-value,Values=$APPLICATION_ARTIFACT | jq -r '.Images[].ImageId' > $existAMIOutputFile
+        '''
 
-//         set +x
-//     '''
-// }
+    }
 
-// def test(){
+    if (readFile("${envToBuildAMI}_${regionToBuildAMI}_AMI.out").trim() != "" ){
+        exist = true
+    }
 
-//     // ASGOUT=getASGINFO("t")
-//     // def list = ASGOUT.readLines()
+    return exist
+}
 
-//     MIN=sh(returnStdout: true, script: 'echo test').trim()
-//     println "${MIN}"
+def build_AMI(envList) {
 
-// }
+    withEnv(envList){
+        sh '''#!/bin/bash
+            source $SCRIPTS_BASE/jenkins/assume_role.sh platform $envToBuildAMI-$regionToBuildAMI
+            . /bin/virtualenvwrapper.sh
+            workon platform
 
-// def returnTest(){
-//     return readFile("/var/lib/jenkins/jsontmp")
-// }
-
-
-// def apply_chef(){
-
-//     sh '''#!/bin/bash
-//         set -x
-//         ./sun-ms-api-${ENVIRONMENT}_version = \"test\"
-//         set +x
-//     '''
-// }
+            /usr/local/bin/packer build --var-file=$SCRIPTS_BASE/jenkins/packer-terraform/sun-ms/$envToBuildAMI-$regionToBuildAMI.json -var api=$API -var app_version=$APP_VERSION -var ami_version=$AMI_VERSION -var ami_prefix=sun-ms-$API -var assembly=$ASSEMBLY -var artifact_prefix=$artifact_prefix $SCRIPTS_BASE/jenkins/packer-terraform/sun-ms/packer.json
+        '''
+    }
+}
