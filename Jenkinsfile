@@ -39,10 +39,6 @@ stage('Parameter Check'){
 stage("Build and deploy AMI to QA"){
     // input(message: "Want to deploy AMI to QA?") 
 
-    stage("test"){
-        println "test stage"
-    }
-
     def selectedRegion = input(message: "Select region to deploy AMI", parameters: [
         extendedChoice(
            defaultValue: 'us-east-1,us-west-2',
