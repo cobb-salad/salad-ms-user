@@ -53,9 +53,9 @@ stage("Build and deploy AMI to QA"){
     //     )
     // ])
 
-    def selectedRegion = input(message: "Select region to deploy AMI", parameters:[
+    def selectedRegion = input(message: "Select", parameters:[
         [$class: 'BooleanParameterDefinition', defaultValue: true, description: "us-east-1", name: "us-east-1"]
-        [$class: 'BooleanParameterDefinition', defaultValue: true, description: "us-west-2", name: "us-west-2"]
+        [$class: 'BooleanParameterDefinition', defaultValue: false, description: "us-west-2", name: "us-west-2"]
     ])
 
     println "${selectedRegion}"
