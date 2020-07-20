@@ -23,6 +23,7 @@ stage('Parameter Check'){
             if(TAG.contains("RC") || TAG.contains("SNAPSHOT")){
 
             }else if(TAG.contains("RELEASE")){
+                println "RELEASE"
                 IsDeployToPROD = true
             }else{
                 throw new Exception("The TAG must include one of name \"RC\", \"SNAPSHOT\", \"RELEASE\" to deploy QA or PROD")
