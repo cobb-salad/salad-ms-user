@@ -60,6 +60,8 @@ stage("Build and deploy AMI to QA"){
                 def proceedingParallel = input(message: "select", parameters: [
                     booleanParam(name: "proceeding", defaultValue: true, description: "Proceeding")
                 ])
+
+                println "${proceedingParallel}"
                 stage("qa-us-east-1_build_ami"){
                     if(selectedRegion.contains("us-east-1")){
                         MSG = "Want to build AMI for QA us-east-1"
