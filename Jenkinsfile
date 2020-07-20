@@ -5,7 +5,7 @@ ASSEMBLY="-assembly"
 AMI_VERSION=0
 STAGES = "build_artifacts,build_ami,deploy_to_QA"
 QA_REGIONS= ["us-west-2","us-east-1"]
-PROD_REGIONS= ["ap-southeast-1","eu-west-2","us-west-2","us-east-1"]
+PROD_REGIONS= ["ap-southeast-1","eu-west-1","us-west-2","us-east-1"]
 common_envs = [ "API=${SERVICE}", "ASSEMBLY=${ASSEMBLY}" ]
 
 buildAMIInfo = [:]
@@ -60,6 +60,7 @@ stage("Build and deploy AMI to QA"){
                     if(selectedRegion.contains("us-east-1")){
                         input(message: "Want to build AMI for QA us-east-1?")
                         node{
+                            test_chef()
                             println "QA-us-east-1_build_ami"
                         }
                     }
@@ -133,6 +134,24 @@ def apply_terraform(envList){
 
     }
     
+}
+
+def test_chef(){
+    CHEF_ENVIRONMENT = "qa-us-east-1-${SERVICE}"
+
+    regex="^[qa|prod].*[1-2]\$"
+    if((CHEF_ENVIRONMENT =~ regex).matches()){
+        ATTRIBUTE="[\"platform-microservice\"][\"${SERVICE}\"][\"artifact\"][\"version\"]"
+    }else{
+        ATTRIBUTE="[\"b2c-microservice\"][\"${SERVICE}\"][\"artifact\"][\"version\"]"
+    }
+
+    common_envs.add("ATTRIBUTE=${ATTRIBUTE}")
+    withEnv(common_envs){
+        sh '''#!/bin/bash
+            echo ".default_attribute$ATTRIBUTE == \"$APP_VERSION\""
+        '''
+    }
 }
 
 def apply_chef(envList, env, region) {
