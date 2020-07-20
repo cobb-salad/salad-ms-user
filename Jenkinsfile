@@ -3,6 +3,7 @@ SCALA_VERSION="2.12"
 ASSEMBLY="-assembly"
 
 AMI_VERSION=0
+IsDeployToPROD = false
 STAGES = "build_artifacts,build_ami,deploy_to_QA"
 QA_REGIONS= ["us-west-2","us-east-1"]
 PROD_REGIONS= ["ap-southeast-1","eu-west-1","us-west-2","us-east-1"]
@@ -22,7 +23,7 @@ stage('Parameter Check'){
             if(TAG.contains("RC") || TAG.contains("SNAPSHOT")){
 
             }else if(TAG.contains("RELEASE")){
-                STAGES = STAGE + ",build_ami_prod,deploy_to_PROD"
+                IsDeployToPROD = true
             }else{
                 throw new Exception("The TAG must include one of name \"RC\", \"SNAPSHOT\", \"RELEASE\" to deploy QA or PROD")
             }
@@ -53,16 +54,12 @@ stage("Build and deploy AMI to QA"){
     //     )
     // ])
 
-    def selectedRegion = input(message: "Select", parameters:[
-        [$class: 'BooleanParameterDefinition', defaultValue: true, description: "us-east-1", name: "us-east-1"]
-        [$class: 'BooleanParameterDefinition', defaultValue: false, description: "us-west-2", name: "us-west-2"]
-    ])
-
-    println "${selectedRegion}"
-
     parallel (
         "QA-useast-1" : {
             node{
+                def proceedingParallel = input(message: "select", parameters: [
+                    booleanParam(name: "proceeding", defaultValue: true, description: "Proceeding")
+                ])
                 stage("qa-us-east-1_build_ami"){
                     if(selectedRegion.contains("us-east-1")){
                         MSG = "Want to build AMI for QA us-east-1"
