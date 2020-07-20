@@ -59,7 +59,8 @@ stage("Build and deploy AMI to QA"){
                 stage("qa-us-east-1_build_ami"){
                     if(selectedRegion.contains("us-east-1")){
                         MSG = "Want to build AMI for QA us-east-1"
-                        input(message: "${MSG}")
+                        region = "us-east-1"
+                        input(message: "Want to build AMI for QA ${region}")
                         node{
                             test_chef()
                             println "QA-us-east-1_build_ami"
