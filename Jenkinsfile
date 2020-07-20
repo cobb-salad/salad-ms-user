@@ -39,19 +39,26 @@ stage('Parameter Check'){
 stage("Build and deploy AMI to QA"){
     // input(message: "Want to deploy AMI to QA?") 
 
-    def selectedRegion = input(message: "Select region to deploy AMI", parameters: [
-        extendedChoice(
-           defaultValue: 'us-east-1,us-west-2',
-           description: '',
-           multiSelectDelimiter: ',',
-           name: 'selectedRegion',
-           quoteValue: false,
-           saveJSONParameterToFile: false,
-           type: 'PT_CHECKBOX',
-           value:'us-east-1,us-west-2',
-           visibleItemCount: 2
-        )
+    // def selectedRegion = input(message: "Select region to deploy AMI", parameters: [
+    //     extendedChoice(
+    //        defaultValue: 'us-east-1,us-west-2',
+    //        description: '',
+    //        multiSelectDelimiter: ',',
+    //        name: 'selectedRegion',
+    //        quoteValue: false,
+    //        saveJSONParameterToFile: false,
+    //        type: 'PT_CHECKBOX',
+    //        value:'us-east-1,us-west-2',
+    //        visibleItemCount: 2
+    //     )
+    // ])
+
+    def selectedRegion = input(message: "Select region to deploy AMI", parameters:[
+        [$class: 'BooleanParameterDefinition', defaultValue: true, description: "us-east-1", name: "us-east-1"]
+        [$class: 'BooleanParameterDefinition', defaultValue: true, description: "us-west-2", name: "us-west-2"]
     ])
+
+    println "${selectedRegion}"
 
     parallel (
         "QA-useast-1" : {
