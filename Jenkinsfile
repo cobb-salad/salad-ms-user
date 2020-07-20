@@ -56,51 +56,51 @@ stage("Build and deploy AMI to QA"){
 
     parallel (
         "QA-useast-1" : {
-            node{
-                def proceedingParallel = input(message: "select", parameters: [
-                    booleanParam(name: "useast1", defaultValue: true, description: "useast1")
-                ])
+            def proceedingParallel = input(message: "select", parameters: [
+                booleanParam(name: "useast1", defaultValue: true, description: "useast1")
+            ])
 
-                if(proceedingParallel){
-                    stage("qa-us-east-1_build_ami"){
-                        MSG = "Want to build AMI for QA us-east-1"
-                        env = "qa"
-                        region = "us-east-1"
-                        input(message: "Want to build AMI for ${env.toUpperCase()} ${region}")
-                        node{
-                            // test_chef()
-                            println "QA-us-east-1_build_ami"
-                        }
+            if(proceedingParallel){
+            node{
+                stage("qa-us-east-1_build_ami"){
+                    MSG = "Want to build AMI for QA us-east-1"
+                    env = "qa"
+                    region = "us-east-1"
+                    input(message: "Want to build AMI for ${env.toUpperCase()} ${region}")
+                    node{
+                        // test_chef()
+                        println "QA-us-east-1_build_ami"
                     }
-                    stage("qa-us-east-1_deploy_ami") {
-                        input(message: "Want to deploy AMI to QA us-east-1?")
-                        node{
-                            println "QA-us-east-1_deploy_ami"
-                        }
+                }
+                stage("qa-us-east-1_deploy_ami") {
+                    input(message: "Want to deploy AMI to QA us-east-1?")
+                    node{
+                        println "QA-us-east-1_deploy_ami"
                     }
                 }
             }
+            }
         },
         "QA-uswest-2" : {
+            def proceedingParallel = input(message: "select", parameters: [
+                booleanParam(name: "uswest2", defaultValue: true, description: "uswest2")
+            ])
+            if(proceedingParallel){
             node{
-                def proceedingParallel = input(message: "select", parameters: [
-                    booleanParam(name: "uswest2", defaultValue: true, description: "uswest2")
-                ])
 
-                if(proceedingParallel){
-                    stage("qa-us-west-2_build_ami"){
-                        input(message: "Want to build AMI for QA us-west-2?")
-                        node{
-                            println "QA-us-west-2_build_ami"
-                        }
-                    }
-                    stage("qa-us-west-2_deploy_ami") {
-                        input(message: "Want to deploy AMI to QA us-west-2?")
-                        node{
-                            println "QA-us-west-2_deploy_ami"
-                        }
+                stage("qa-us-west-2_build_ami"){
+                    input(message: "Want to build AMI for QA us-west-2?")
+                    node{
+                        println "QA-us-west-2_build_ami"
                     }
                 }
+                stage("qa-us-west-2_deploy_ami") {
+                    input(message: "Want to deploy AMI to QA us-west-2?")
+                    node{
+                        println "QA-us-west-2_deploy_ami"
+                    }
+                }
+            }
             }
         }
     )
