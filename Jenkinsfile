@@ -34,6 +34,8 @@ stage('Parameter Check'){
         }finally{
             common_envs.add("APP_VERSION=${TAG}")
         }
+
+        println "${IsDeployToPROD}"
     }
 }
 
