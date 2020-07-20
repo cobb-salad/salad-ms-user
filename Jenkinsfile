@@ -60,7 +60,7 @@ stage("Build and deploy AMI to QA"){
     parallel (
         "QA-useast-1" : {
             def proceedingParallel = input(message: "select", parameters: [
-                booleanParam(name: "useast1", defaultValue: true, description: "useast1")
+                booleanParam(name: "useast1ss", defaultValue: true, description: "useast1")
             ])
 
             if(proceedingParallel){
