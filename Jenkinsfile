@@ -106,6 +106,61 @@ stage("Build and deploy AMI to QA"){
     )
 }
 
+
+stage("Build and deploy AMI to PROD"){
+    if(IsDeployToPROD){
+    parallel (
+        "PROD-useast-1" : {
+            def proceedingParallel = input(message: "select", parameters: [
+                booleanParam(name: "useast1", defaultValue: true, description: "useast1")
+            ])
+
+            if(proceedingParallel){
+            node{
+                stage("prod-us-east-1_build_ami"){
+                    MSG = "Want to build AMI for PROD us-east-1"
+                    env = "prod"
+                    region = "us-east-1"
+                    input(message: "Want to build AMI for ${env.toUpperCase()} ${region}")
+                    node{
+                        println "PROD-us-east-1_build_ami"
+                    }
+                }
+                stage("prod-us-east-1_deploy_ami") {
+                    input(message: "Want to deploy AMI to PROD us-east-1?")
+                    node{
+                        println "PROD-us-east-1_deploy_ami"
+                    }
+                }
+            }
+            }
+        },
+        "PROD-uswest-2" : {
+            def proceedingParallel = input(message: "select", parameters: [
+                booleanParam(name: "uswest2", defaultValue: true, description: "uswest2")
+            ])
+            if(proceedingParallel){
+            node{
+
+                stage("prod-us-west-2_build_ami"){
+                    input(message: "Want to build AMI for PROD us-west-2?")
+                    node{
+                        println "PROD-us-west-2_build_ami"
+                    }
+                }
+                stage("prod-us-west-2_deploy_ami") {
+                    input(message: "Want to deploy AMI to PROD us-west-2?")
+                    node{
+                        println "PROD-us-west-2_deploy_ami"
+                    }
+                }
+            }
+            }
+        }
+    )
+    }
+
+}
 def apply_terraform(envList){
 
     withEnv(envList){
