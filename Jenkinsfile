@@ -65,7 +65,9 @@ stage("Build and deploy AMI to QA"){
 
             if(proceedingParallel){
             node{
-                stage("qa-us-east-1_build_ami"){
+                def env = "qa"
+                def region = "us-east-1"
+                stage("${env}-${region}_build_ami"){
                     MSG = "Want to build AMI for QA us-east-1"
                     env = "qa"
                     region = "us-east-1"
