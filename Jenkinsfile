@@ -148,6 +148,8 @@ def test_chef(){
 
     AVERSION = "\"${TAG}\""
 
+    println ${AVERSION}
+
     common_envs.add("ATTRIBUTE=${ATTRIBUTE}")
     common_envs.add("AVERSION=${AVERSION}")
     withEnv(common_envs){
