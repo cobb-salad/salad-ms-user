@@ -149,7 +149,7 @@ def test_chef(){
     common_envs.add("ATTRIBUTE=${ATTRIBUTE}")
     withEnv(common_envs){
         sh '''#!/bin/bash
-            echo .default_attribute$ATTRIBUTE == \"$APP_VERSION\"
+            echo ".default_attribute$ATTRIBUTE == \"\"$APP_VERSION\"\""
         '''
     }
 }
