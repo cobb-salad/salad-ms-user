@@ -146,10 +146,13 @@ def test_chef(){
         ATTRIBUTE="[\"b2c-microservice\"][\"${SERVICE}\"][\"artifact\"][\"version\"]"
     }
 
+    AVERSION = "\"${TAG}\""
+
     common_envs.add("ATTRIBUTE=${ATTRIBUTE}")
+    common_envs.add("AVERSION=${AVERSION}")
     withEnv(common_envs){
         sh '''#!/bin/bash
-            echo ".default_attribute$ATTRIBUTE == \"\"$APP_VERSION\"\""
+            echo ".default_attribute$ATTRIBUTE == $AVERSION"
         '''
     }
 }
