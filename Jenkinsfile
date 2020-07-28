@@ -39,6 +39,11 @@ stage('Parameter Check'){
         println "${IsDeployToPROD}"
     }
 }
+stage("step test"){
+    steps{
+        println "step test"
+    }
+}
 
 stage("Build and deploy AMI to QA"){
     // input(message: "Want to deploy AMI to QA?") 
