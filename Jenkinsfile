@@ -40,7 +40,7 @@ stage('Parameter Check'){
     }
 }
 stage("step test"){
-    steps{
+    step{
         println "step test"
     }
 }
