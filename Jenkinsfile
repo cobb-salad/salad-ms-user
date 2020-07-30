@@ -1,3 +1,53 @@
+def runParallel = true
+def buildStages
+
+node('master') {
+  stage('Initialise') {
+    // Set up List<Map<String,Closure>> describing the builds
+    buildStages = prepareBuildStages()
+    println("Initialised pipeline.")
+  }
+
+  for (builds in buildStages) {
+    if (runParallel) {
+      parallel(builds)
+    } else {
+      // run serially (nb. Map is unordered! )
+      for (build in builds.values()) {
+        build.call()
+      }
+    }
+  }
+
+  stage('Finish') {
+      println('Build complete.')
+  }
+}
+
+// Create List of build stages to suit
+def prepareBuildStages() {
+  def buildList = []
+
+  for (i=1; i<5; i++) {
+    def buildStages = [:]
+    for (name in [ 'one', 'two', 'three' ] ) {
+      def n = "${name} ${i}"
+      buildStages.put(n, prepareOneBuildStage(n))
+    }
+    buildList.add(buildStages)
+  }
+  return buildList
+}
+
+def prepareOneBuildStage(String name) {
+  return {
+    stage("Build stage:${name}") {
+      println("Building ${name}")
+      sh(script:'sleep 5', returnStatus:true)
+    }
+  }
+}
+
 SERVICE="user"
 SCALA_VERSION="2.12"
 ASSEMBLY="-assembly"
@@ -11,166 +61,191 @@ common_envs = [ "API=${SERVICE}", "ASSEMBLY=${ASSEMBLY}" ]
 
 buildAMIInfo = [:]
 
-stage('Parameter Check'){
-    node{
-        TAG = "${params.TAG}"
+// stage('Parameter Check'){
+//     node{
+//         TAG = "${params.TAG}"
 
-        try{
-            if (TAG == "") {
-                throw new Exception("Enter the artifact version for the build in TAG")
-            }
+//         try{
+//             if (TAG == "") {
+//                 throw new Exception("Enter the artifact version for the build in TAG")
+//             }
 
-            if(TAG.contains("RC") || TAG.contains("SNAPSHOT")){
+//             if(TAG.contains("RC") || TAG.contains("SNAPSHOT")){
 
-            }else if(TAG.contains("RELEASE")){
-                println "RELEASE"
-                IsDeployToPROD = true
-            }else{
-                throw new Exception("The TAG must include one of name \"RC\", \"SNAPSHOT\", \"RELEASE\" to deploy QA or PROD")
-            }
-        }catch(e){
-            currentBuild.result = "FAILURE"
-    //             throw(e)
-            println(e)
-        }finally{
-            common_envs.add("APP_VERSION=${TAG}")
+//             }else if(TAG.contains("RELEASE")){
+//                 println "RELEASE"
+//                 IsDeployToPROD = true
+//             }else{
+//                 throw new Exception("The TAG must include one of name \"RC\", \"SNAPSHOT\", \"RELEASE\" to deploy QA or PROD")
+//             }
+//         }catch(e){
+//             currentBuild.result = "FAILURE"
+//     //             throw(e)
+//             println(e)
+//         }finally{
+//             common_envs.add("APP_VERSION=${TAG}")
+//         }
+
+//         println "${IsDeployToPROD}"
+//     }
+// }
+
+
+
+// stage("Build and deploy AMI to QA"){
+//     // input(message: "Want to deploy AMI to QA?") 
+
+//     // def selectedRegion = input(message: "Select region to deploy AMI", parameters: [
+//     //     extendedChoice(
+//     //        defaultValue: 'us-east-1,us-west-2',
+//     //        description: '',
+//     //        multiSelectDelimiter: ',',
+//     //        name: 'selectedRegion',
+//     //        quoteValue: false,
+//     //        saveJSONParameterToFile: false,
+//     //        type: 'PT_CHECKBOX',
+//     //        value:'us-east-1,us-west-2',
+//     //        visibleItemCount: 2
+//     //     )
+//     // ])
+
+//     parallel (
+//         "QA-useast-1" : {
+//             def proceedingParallel = input(message: "select", parameters: [
+//                 booleanParam(name: "useast1ss", defaultValue: true, description: "useast1")
+//             ])
+
+//             if(proceedingParallel){
+//             node{
+//                 def env = "qa"
+//                 def region = "us-east-1"
+//                 stage("${env}-${region}_build_ami"){
+//                     MSG = "Want to build AMI for QA us-east-1"
+//                     env = "qa"
+//                     region = "us-east-1"
+//                     input(message: "Want to build AMI for ${env.toUpperCase()} ${region}")
+//                     node{
+//                         // test_chef()
+//                         println "QA-us-east-1_build_ami"
+//                     }
+//                 }
+//                 stage("qa-us-east-1_deploy_ami") {
+//                     input(message: "Want to deploy AMI to QA us-east-1?")
+//                     node{
+//                         println "QA-us-east-1_deploy_ami"
+//                     }
+//                 }
+//             }
+//             }
+//         },
+//         "QA-uswest-2" : {
+//             def proceedingParallel = input(message: "select", parameters: [
+//                 booleanParam(name: "uswest2", defaultValue: true, description: "uswest2")
+//             ])
+//             if(proceedingParallel){
+//             node{
+
+//                 stage("qa-us-west-2_build_ami"){
+//                     input(message: "Want to build AMI for QA us-west-2?")
+//                     node{
+//                         println "QA-us-west-2_build_ami"
+//                     }
+//                 }
+//                 stage("qa-us-west-2_deploy_ami") {
+//                     input(message: "Want to deploy AMI to QA us-west-2?")
+//                     node{
+//                         println "QA-us-west-2_deploy_ami"
+//                     }
+//                 }
+//             }
+//             }
+//         }
+//     )
+// }
+
+
+// stage("Build and deploy AMI to PROD"){
+//     if(IsDeployToPROD){
+//     parallel (
+//         "PROD-useast-1" : {
+//             def proceedingParallel = input(message: "select", parameters: [
+//                 booleanParam(name: "useast1", defaultValue: true, description: "useast1")
+//             ])
+
+//             if(proceedingParallel){
+//             node{
+//                 stage("prod-us-east-1_build_ami"){
+//                     MSG = "Want to build AMI for PROD us-east-1"
+//                     env = "prod"
+//                     region = "us-east-1"
+//                     input(message: "Want to build AMI for ${env.toUpperCase()} ${region}")
+//                     node{
+//                         println "PROD-us-east-1_build_ami"
+//                     }
+//                 }
+//                 stage("prod-us-east-1_deploy_ami") {
+//                     input(message: "Want to deploy AMI to PROD us-east-1?")
+//                     node{
+//                         println "PROD-us-east-1_deploy_ami"
+//                     }
+//                 }
+//             }
+//             }
+//         },
+//         "PROD-uswest-2" : {
+//             def proceedingParallel = input(message: "select", parameters: [
+//                 booleanParam(name: "uswest2", defaultValue: true, description: "uswest2")
+//             ])
+//             if(proceedingParallel){
+//             node{
+
+//                 stage("prod-us-west-2_build_ami"){
+//                     input(message: "Want to build AMI for PROD us-west-2?")
+//                     node{
+//                         println "PROD-us-west-2_build_ami"
+//                     }
+//                 }
+//                 stage("prod-us-west-2_deploy_ami") {
+//                     input(message: "Want to deploy AMI to PROD us-west-2?")
+//                     node{
+//                         println "PROD-us-west-2_deploy_ami"
+//                     }
+//                 }
+//             }
+//             }
+//         }
+//     )
+//     }
+
+// }
+
+def prepareOneBuildStage(env, region){
+    return {
+        stage("Build AMI to ${env.toUpperCase()}-${region}"){
+            input(message: "Build AMI for ${env.toUpperCase()}-${region}?")
+            println "Build AMI for ${env.toUpperCase()}-${region}"
         }
-
-        println "${IsDeployToPROD}"
     }
 }
-stage("step test"){
-    step{
-        println "step test"
+
+def prepareOneCanaryStage(env, region){
+    return {
+        stage("Deploy canary to ${env.toUpperCase()}-${region}"){
+            input(message: "Deploy canary for ${env.toUpperCase()}-${region}?")
+            println "Deploy canary for ${env.toUpperCase()}-${region}"
+        }
     }
 }
 
-stage("Build and deploy AMI to QA"){
-    // input(message: "Want to deploy AMI to QA?") 
-
-    // def selectedRegion = input(message: "Select region to deploy AMI", parameters: [
-    //     extendedChoice(
-    //        defaultValue: 'us-east-1,us-west-2',
-    //        description: '',
-    //        multiSelectDelimiter: ',',
-    //        name: 'selectedRegion',
-    //        quoteValue: false,
-    //        saveJSONParameterToFile: false,
-    //        type: 'PT_CHECKBOX',
-    //        value:'us-east-1,us-west-2',
-    //        visibleItemCount: 2
-    //     )
-    // ])
-
-    parallel (
-        "QA-useast-1" : {
-            def proceedingParallel = input(message: "select", parameters: [
-                booleanParam(name: "useast1ss", defaultValue: true, description: "useast1")
-            ])
-
-            if(proceedingParallel){
-            node{
-                def env = "qa"
-                def region = "us-east-1"
-                stage("${env}-${region}_build_ami"){
-                    MSG = "Want to build AMI for QA us-east-1"
-                    env = "qa"
-                    region = "us-east-1"
-                    input(message: "Want to build AMI for ${env.toUpperCase()} ${region}")
-                    node{
-                        // test_chef()
-                        println "QA-us-east-1_build_ami"
-                    }
-                }
-                stage("qa-us-east-1_deploy_ami") {
-                    input(message: "Want to deploy AMI to QA us-east-1?")
-                    node{
-                        println "QA-us-east-1_deploy_ami"
-                    }
-                }
-            }
-            }
-        },
-        "QA-uswest-2" : {
-            def proceedingParallel = input(message: "select", parameters: [
-                booleanParam(name: "uswest2", defaultValue: true, description: "uswest2")
-            ])
-            if(proceedingParallel){
-            node{
-
-                stage("qa-us-west-2_build_ami"){
-                    input(message: "Want to build AMI for QA us-west-2?")
-                    node{
-                        println "QA-us-west-2_build_ami"
-                    }
-                }
-                stage("qa-us-west-2_deploy_ami") {
-                    input(message: "Want to deploy AMI to QA us-west-2?")
-                    node{
-                        println "QA-us-west-2_deploy_ami"
-                    }
-                }
-            }
-            }
+def prepareOneRollingStage(env, region){
+    return {
+        stage("Rolling upgrade to ${env.toUpperCase()}-${region}") {
+            input(message: "Rolling upgrade for ${env.toUpperCase()}-${region}?")
+            println "Rolling upgrade to ${env.toUpperCase()}-${region}"
         }
-    )
-}
-
-
-stage("Build and deploy AMI to PROD"){
-    if(IsDeployToPROD){
-    parallel (
-        "PROD-useast-1" : {
-            def proceedingParallel = input(message: "select", parameters: [
-                booleanParam(name: "useast1", defaultValue: true, description: "useast1")
-            ])
-
-            if(proceedingParallel){
-            node{
-                stage("prod-us-east-1_build_ami"){
-                    MSG = "Want to build AMI for PROD us-east-1"
-                    env = "prod"
-                    region = "us-east-1"
-                    input(message: "Want to build AMI for ${env.toUpperCase()} ${region}")
-                    node{
-                        println "PROD-us-east-1_build_ami"
-                    }
-                }
-                stage("prod-us-east-1_deploy_ami") {
-                    input(message: "Want to deploy AMI to PROD us-east-1?")
-                    node{
-                        println "PROD-us-east-1_deploy_ami"
-                    }
-                }
-            }
-            }
-        },
-        "PROD-uswest-2" : {
-            def proceedingParallel = input(message: "select", parameters: [
-                booleanParam(name: "uswest2", defaultValue: true, description: "uswest2")
-            ])
-            if(proceedingParallel){
-            node{
-
-                stage("prod-us-west-2_build_ami"){
-                    input(message: "Want to build AMI for PROD us-west-2?")
-                    node{
-                        println "PROD-us-west-2_build_ami"
-                    }
-                }
-                stage("prod-us-west-2_deploy_ami") {
-                    input(message: "Want to deploy AMI to PROD us-west-2?")
-                    node{
-                        println "PROD-us-west-2_deploy_ami"
-                    }
-                }
-            }
-            }
-        }
-    )
     }
-
 }
+
 def apply_terraform(envList){
 
     withEnv(envList){
