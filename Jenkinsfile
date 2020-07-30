@@ -1,4 +1,4 @@
-def runParallel = true
+def runParallel = false
 def buildStages
 
 node('master') {
