@@ -3,6 +3,4 @@
 import dev.mjkong.cloud.*
 
 testJenkinsProperties().
-  rotateBuilds(numToKeep: 10, daysToKeep: 30).
-  disableConcurrentBuilds().
-  apply()
+  rotateBuilds(numToKeep: 10, daysToKeep: 30)
