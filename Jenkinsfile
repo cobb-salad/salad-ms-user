@@ -1,5 +1,5 @@
 #!groovy
-@library("test-jenkins-common@0.0.1")
+@Library("test-jenkins-common@0.0.1")
 import dev.mjkong.cloud.*
 
 testJenkinsProperties().
